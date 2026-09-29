@@ -1,0 +1,76 @@
+<main class="home">
+
+    <section class="banner">
+        <div class="banner-content">
+            <span class="banner-tag">Estreno destacado</span>
+
+            <h1>Viví el cine como nunca antes</h1>
+
+            <p>
+                Descubrí los últimos estrenos, elegí tu función
+                y reservá tus butacas.
+            </p>
+
+            <button type="button" class="primary-button">
+                Ver funciones
+            </button>
+        </div>
+    </section>
+
+
+    <section class="movies-section">
+
+        <div class="section-header">
+            <div>
+                <span class="section-label">Ahora en cartelera</span>
+                <h2>Películas</h2>
+            </div>
+
+            <button type="button" class="secondary-button">
+                Ver todas
+            </button>
+        </div>
+
+
+        <div class="filters">
+
+            <input type="text" placeholder="Buscar película..." class="search-input" />
+
+            <select class="genre-select">
+                <option>Todos los géneros</option>
+                <option>Acción</option>
+                <option>Comedia</option>
+                <option>Terror</option>
+                <option>Drama</option>
+            </select>
+
+        </div>
+
+
+        <div class="movies-grid">
+
+            @for (movie of movies; track movie.id) {
+            <app-movie-card [movie]="movie"></app-movie-card>
+            }
+        </div>
+
+    </section>
+
+
+    <section class="coming-soon">
+
+        <div class="section-header">
+            <div>
+                <span class="section-label">Muy pronto</span>
+                <h2>Próximamente</h2>
+            </div>
+        </div>
+
+        <p>
+            Descubrí las películas que llegan próximamente
+            y preparate para sus estrenos.
+        </p>
+
+    </section>
+
+</main>

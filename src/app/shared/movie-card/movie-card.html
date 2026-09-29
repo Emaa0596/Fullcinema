@@ -1,0 +1,27 @@
+<article class="movie-card">
+
+  <img
+    class="movie-poster"
+    [src]="movie().imagen"
+    [alt]="movie().nombre"
+  />
+
+  <div class="movie-info">
+
+    <h3>{{ movie().nombre }}</h3>
+
+    <p class="movie-details">
+      +{{ movie().edadMinima }} · {{ movie().duracion }} min
+    </p>
+
+    <p class="movie-synopsis">
+      {{ movie().sinopsis }}
+    </p>
+
+    <button type="button">
+      Ver funciones
+    </button>
+
+  </div>
+
+</article>

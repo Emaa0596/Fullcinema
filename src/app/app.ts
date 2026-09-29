@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLinkActive, RouterLink } from '@angular/router';
 
 @Component({
   imports: [RouterOutlet],
@@ -8,5 +8,5 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('cine-app');
+  protected readonly title = signal('Full-cinema');
 }
