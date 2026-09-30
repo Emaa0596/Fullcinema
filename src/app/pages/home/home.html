@@ -34,14 +34,12 @@
 
         <div class="filters">
 
-            <input type="text" placeholder="Buscar película..." class="search-input" />
+            <input type="text" placeholder="Buscar película..." class="search-input" (input)="onSearch($event)" />
 
-            <select class="genre-select">
-                <option>Todos los géneros</option>
-                <option>Acción</option>
-                <option>Comedia</option>
-                <option>Terror</option>
-                <option>Drama</option>
+            <select class="genre-select" (change)="onGenreChange($event)">
+                <option value="">Todos los géneros</option>
+                @for (genre of genresSet; track genre) {
+                <option>{{ genre }}</option>}
             </select>
 
         </div>
@@ -49,7 +47,7 @@
 
         <div class="movies-grid">
 
-            @for (movie of movies; track movie.id) {
+            @for (movie of filteredMovies(); track movie.id) {
             <app-movie-card [movie]="movie"></app-movie-card>
             }
         </div>

@@ -5,6 +5,6 @@ export interface Movie {
     imagen: string;
     duracion: number;
     sinopsis: string;
-    generos: string;
+    generos: string[];
     edadMinima: number;
 }
