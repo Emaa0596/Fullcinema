@@ -11,7 +11,7 @@
     <h3>{{ movie().nombre }}</h3>
 
     <p class="movie-details">
-      +{{ movie().edadMinima }} · {{ movie().duracion }} min
+      {{ movie().edadMinima? '+' + movie().edadMinima : 'ATP'}} · {{ movie().duracion }} min · {{ movie().generos.join(', ') }}
     </p>
 
     <p class="movie-synopsis">

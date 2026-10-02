@@ -1,1 +1,47 @@
-<p>header works!</p>
+<header class="main-header">
+  <div class="logo">
+    <a routerLink="/home">
+      FullCinema
+    </a>
+  </div>
+
+  <nav class="main-nav">
+    <a
+      routerLink="/home"
+      routerLinkActive="active"
+    >
+      Inicio
+    </a>
+
+    <a
+      routerLink="/movies"
+      routerLinkActive="active"
+    >
+      Cartelera
+    </a>
+
+    <a
+      routerLink="/coming-soon"
+      routerLinkActive="active"
+    >
+      Próximamente
+    </a>
+  </nav>
+
+  <div class="auth-actions">
+    <a
+      routerLink="/login"
+      routerLinkActive="active"
+    >
+      Ingresar
+    </a>
+
+    <a
+      routerLink="/register"
+      routerLinkActive="active"
+      class="register-button"
+    >
+      Registrarse
+    </a>
+  </div>
+</header>
