@@ -6,42 +6,38 @@
   </div>
 
   <nav class="main-nav">
-    <a
-      routerLink="/home"
-      routerLinkActive="active"
-    >
+    <a routerLink="/home" routerLinkActive="active">
       Inicio
     </a>
 
-    <a
-      routerLink="/movies"
-      routerLinkActive="active"
-    >
+    <a routerLink="/movies" routerLinkActive="active">
       Cartelera
     </a>
 
-    <a
-      routerLink="/coming-soon"
-      routerLinkActive="active"
-    >
+    <a routerLink="/coming-soon" routerLinkActive="active">
       Próximamente
     </a>
   </nav>
 
   <div class="auth-actions">
-    <a
-      routerLink="/login"
-      routerLinkActive="active"
-    >
+    @if (auth.session()){
+    <span class="user-email">
+      {{ auth.session()?.user?.email }}
+    </span>
+
+    <button type="button" (click)="auth.logout()">
+      Cerrar sesión
+    </button>
+    } @else {
+
+    <a routerLink="/login" routerLinkActive="active">
       Ingresar
     </a>
 
-    <a
-      routerLink="/register"
-      routerLinkActive="active"
-      class="register-button"
-    >
+    <a routerLink="/register" routerLinkActive="active" class="register-button">
       Registrarse
     </a>
+    }
+
   </div>
 </header>

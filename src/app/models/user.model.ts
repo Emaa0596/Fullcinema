@@ -19,7 +19,7 @@ export class RegisteredUser extends User {
     public rol: Role,
     public tipoDeSangre?: string,
     public colorDeOjos?: string,
-    public vacaciones?: Number
+    public vacaciones?: number
   ) {
     super(nombre, apellido, nacimiento, email);
   }

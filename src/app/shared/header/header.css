@@ -59,3 +59,8 @@
 .active {
   color: #e5b34c !important;
 }
+
+.user-email {
+  color: #ffffff;
+  font-weight: 600;
+}
