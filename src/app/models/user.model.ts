@@ -1,4 +1,4 @@
-import { Role } from './role.models';
+import { Role } from './role.model';
 
 export class User {
   constructor(

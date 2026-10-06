@@ -1,0 +1,63 @@
+<section class="profile">
+
+  @if (profile(); as user) {
+
+    <h1>Mi perfil</h1>
+
+    <p>
+      <strong>Nombre:</strong>
+      {{ user.nombre }}
+    </p>
+
+    <p>
+      <strong>Apellido:</strong>
+      {{ user.apellido }}
+    </p>
+
+    <p>
+      <strong>Email:</strong>
+      {{ email() }}
+    </p>
+    
+    <p>
+      <strong>Fecha de nacimiento:</strong>
+      {{ user.nacimiento }}
+    </p>
+
+    <p>
+      <strong>Tipo de sangre:</strong>
+      {{ user.tipo_de_sangre }}
+    </p>
+
+    <p>
+      <strong>Color de ojos:</strong>
+      {{ user.color_de_ojos }}
+    </p>
+
+    <p>
+      <strong>Días de vacaciones:</strong>
+      {{ user.vacaciones }}
+    </p>
+
+    <p>
+      <strong>Rol:</strong>
+      {{ user.rol }}
+    </p>
+
+    <p>
+      <strong>Puntos:</strong>
+      {{ user.puntos }}
+    </p>
+
+    <p>
+      <strong>Crédito:</strong>
+      {{ user.credito }}
+    </p>
+
+  } @else {
+
+    <p>Cargando perfil...</p>
+
+  }
+
+</section>

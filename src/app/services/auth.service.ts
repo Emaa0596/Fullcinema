@@ -8,20 +8,17 @@ import { supabase } from '../supabase.client';
 export class AuthService {
 
     readonly session = signal<Session | null>(null);
-
+    readonly initialized = this.loadInitialSession();
     constructor() {
-        this.loadInitialSession();
         this.listenAuthChanges();
     }
 
     private async loadInitialSession() {
         const { data, error } = await supabase.auth.getSession();
-
         if (error) {
             console.error('Error obteniendo sesión:', error);
             return;
         }
-
         this.session.set(data.session);
     }
 

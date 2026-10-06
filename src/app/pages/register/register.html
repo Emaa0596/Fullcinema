@@ -23,11 +23,33 @@
       Email
       <input type="email" formControlName="email">
     </label>
+    @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+    <p class="error">
+      El email es obligatorio.
+    </p>
+    }
+
+    @if (form.controls.email.touched && form.controls.email.hasError('email')) {
+    <p class="error">
+      Ingresá un email válido.
+    </p>
+    }
 
     <label>
       Contraseña
       <input type="password" formControlName="password">
     </label>
+    @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+    <p class="error">
+      La contraseña es obligatoria.
+    </p>
+    }
+
+    @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+    <p class="error">
+      La contraseña debe tener al menos 6 caracteres.
+    </p>
+    }
 
     <label>
       Tipo de sangre
@@ -43,6 +65,11 @@
       Días de vacaciones
       <input type="number" formControlName="vacaciones">
     </label>
+    @if (form.controls.vacaciones.touched && form.controls.vacaciones.hasError('min')) {
+    <p class="error">
+      Los días de vacaciones no pueden ser menores a 0.
+    </p>
+    }
 
     <button type="submit">
       Registrarse

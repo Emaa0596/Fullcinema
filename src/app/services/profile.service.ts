@@ -24,4 +24,13 @@ export class ProfileService {
       .from('profiles')
       .insert(profile);
   }
+
+  getProfile(userId: string) {
+  return supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .maybeSingle();
+  }
+
 }

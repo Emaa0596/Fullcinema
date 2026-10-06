@@ -21,8 +21,11 @@
 
   <div class="auth-actions">
     @if (auth.session()){
+      <a routerLink="/profile">
+      Perfil
+      </a>
     <span class="user-email">
-      {{ auth.session()?.user?.email }}
+      {{ auth.session().user?.email }}
     </span>
 
     <button type="button" (click)="auth.logout()">
