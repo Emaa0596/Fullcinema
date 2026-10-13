@@ -22,6 +22,13 @@ export class AuthService {
         this.session.set(data.session);
     }
 
+    signIn(email: string, password: string) {
+        return supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+    }
+
     signUp(email: string, password: string) {
         return supabase.auth.signUp({
             email,
@@ -39,7 +46,7 @@ export class AuthService {
         return supabase.auth.signInWithOAuth({
             provider: 'github',
             options: {
-                redirectTo: `${window.location.origin}/home`
+                redirectTo: `${window.location.origin}/oauth-callback`
             }
         });
     }

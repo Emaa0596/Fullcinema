@@ -1,3 +1,68 @@
-<button type="button" (click)="auth.loginWithGithub()">
-  Ingresar con GitHub
-</button>
+<section class="login">
+
+  <h1>Ingresar</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <label>
+      Email
+      <input
+        type="email"
+        formControlName="email"
+      >
+    </label>
+
+    @if (
+      form.controls.email.touched &&
+      form.controls.email.hasError('required')
+    ) {
+      <p class="error">El email es obligatorio.</p>
+    }
+
+    @if (
+      form.controls.email.touched &&
+      form.controls.email.hasError('email')
+    ) {
+      <p class="error">Ingresá un email válido.</p>
+    }
+
+    <label>
+      Contraseña
+      <input
+        type="password"
+        formControlName="password"
+      >
+    </label>
+
+    @if (
+      form.controls.password.touched &&
+      form.controls.password.hasError('required')
+    ) {
+      <p class="error">La contraseña es obligatoria.</p>
+    }
+
+    @if (errorMessage()) {
+      <p class="error">
+        {{ errorMessage() }}
+      </p>
+    }
+
+    <button type="submit">
+      Ingresar
+    </button>
+
+  </form>
+
+  <div class="oauth-separator">
+    <span>o</span>
+  </div>
+
+  <button
+    type="button"
+    class="github-button"
+    (click)="loginWithGithub()"
+  >
+    Ingresar con GitHub
+  </button>
+
+</section>

@@ -1,0 +1,67 @@
+<section class="admin">
+
+  <h1>Panel de administración</h1>
+
+  <h2>Agregar película</h2>
+
+  <form
+    [formGroup]="movieForm"
+    (ngSubmit)="createMovie()"
+  >
+
+    <label>
+      Nombre
+      <input
+        type="text"
+        formControlName="nombre"
+      >
+    </label>
+
+    <label>
+      Imagen
+      <input
+        type="text"
+        formControlName="imagen"
+        placeholder="/images/movies/pelicula.jpg"
+      >
+    </label>
+
+    <label>
+      Duración
+      <input
+        type="number"
+        formControlName="duracion"
+      >
+    </label>
+
+    <label>
+      Sinopsis
+      <textarea
+        formControlName="sinopsis"
+      ></textarea>
+    </label>
+
+    <label>
+      Géneros
+      <input
+        type="text"
+        formControlName="generos"
+        placeholder="Drama, Suspenso"
+      >
+    </label>
+
+    <label>
+      Edad mínima
+      <input
+        type="number"
+        formControlName="edadMinima"
+      >
+    </label>
+
+    <button type="submit">
+      Agregar película
+    </button>
+
+  </form>
+
+</section>

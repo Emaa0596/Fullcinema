@@ -1,1 +1,98 @@
-<p>complete-profile works!</p>
+<section class="register">
+
+  <h1>Completá tu perfil</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <label>
+      Nombre
+      <input
+        type="text"
+        formControlName="nombre"
+      >
+    </label>
+
+    @if (
+      form.controls.nombre.touched &&
+      form.controls.nombre.hasError('required')
+    ) {
+      <p class="error">
+        El nombre es obligatorio.
+      </p>
+    }
+
+    <label>
+      Apellido
+      <input
+        type="text"
+        formControlName="apellido"
+      >
+    </label>
+
+    @if (
+      form.controls.apellido.touched &&
+      form.controls.apellido.hasError('required')
+    ) {
+      <p class="error">
+        El apellido es obligatorio.
+      </p>
+    }
+
+    <label>
+      Fecha de nacimiento
+      <input
+        type="date"
+        formControlName="nacimiento"
+      >
+    </label>
+
+    @if (
+      form.controls.nacimiento.touched &&
+      form.controls.nacimiento.hasError('required')
+    ) {
+      <p class="error">
+        La fecha de nacimiento es obligatoria.
+      </p>
+    }
+
+    <label>
+      Tipo de sangre
+      <input
+        type="text"
+        formControlName="tipoDeSangre"
+      >
+    </label>
+
+    <label>
+      Color de ojos
+      <input
+        type="text"
+        formControlName="colorDeOjos"
+      >
+    </label>
+
+    <label>
+      Días de vacaciones
+      <input
+        type="number"
+        formControlName="vacaciones"
+        min="0"
+      >
+    </label>
+
+    @if (
+      form.controls.vacaciones.touched &&
+      form.controls.vacaciones.hasError('min')
+    ) {
+      <p class="error">
+        Los días de vacaciones no pueden ser menores a 0.
+      </p>
+    }
+
+    <button type="submit">
+      Guardar perfil
+    </button>
+
+  </form>
+
+</section>

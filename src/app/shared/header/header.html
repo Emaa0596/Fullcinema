@@ -20,12 +20,29 @@
   </nav>
 
   <div class="auth-actions">
-    @if (auth.session()){
-      <a routerLink="/profile">
+
+    @if (auth.session(); as session) {
+
+    <a routerLink="/profile">
       Perfil
-      </a>
+    </a>
+
+    @if (profileStore.profile()?.rol === Role.Admin) {
+    <a routerLink="/admin">
+      Admin
+    </a>
+    }
+
+    @if (
+    profileStore.profile()?.rol === Role.Employee || profileStore.profile()?.rol === Role.Admin
+    ) {
+    <a routerLink="/employee">
+      Empleado
+    </a>
+    }
+
     <span class="user-email">
-      {{ auth.session().user?.email }}
+      {{ session.user.email }}
     </span>
 
     <button type="button" (click)="auth.logout()">
@@ -40,6 +57,7 @@
     <a routerLink="/register" routerLinkActive="active" class="register-button">
       Registrarse
     </a>
+
     }
 
   </div>

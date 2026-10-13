@@ -38,8 +38,8 @@
 
             <select class="genre-select" (change)="onGenreChange($event)">
                 <option value="">Todos los géneros</option>
-                @for (genre of genresSet; track genre) {
-                <option>{{ genre }}</option>}
+                @for (genre of genresSet(); track genre) {
+                <option [value]="genre">{{ genre }}</option>}
             </select>
 
         </div>
@@ -62,7 +62,7 @@
                 <span class="section-label">Muy pronto</span>
                 <h2>Próximamente</h2>
             </div>
-        </div>
+        </div> 
 
         <p>
             Descubrí las películas que llegan próximamente
