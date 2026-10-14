@@ -1,8 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-
 import { AuthService } from '../services/auth.service';
-import { ProfileService } from '../services/profile.service';
 import { Role } from '../models/role.model';
 import { ProfileStore } from '../services/profile.store.service';
 
@@ -27,8 +25,5 @@ export const employeeGuard: CanActivateFn = async () => {
     return router.parseUrl('/home');
   }
 
-  return profile.rol === Role.Employee ||
-         profile.rol === Role.Admin
-    ? true
-    : router.parseUrl('/home');
+  return profile.rol === Role.Employee || profile.rol === Role.Admin ? true : router.parseUrl('/home');
 };

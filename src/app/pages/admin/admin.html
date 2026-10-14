@@ -2,66 +2,251 @@
 
   <h1>Panel de administración</h1>
 
-  <h2>Agregar película</h2>
+  <div class="admin-forms">
 
-  <form
-    [formGroup]="movieForm"
-    (ngSubmit)="createMovie()"
-  >
+    <!-- PELÍCULAS -->
+    <section class="admin-form-section">
 
-    <label>
-      Nombre
-      <input
-        type="text"
-        formControlName="nombre"
-      >
-    </label>
+      @if (editingMovieId() !== null) {
+      <h2>Editar película</h2>
+      } @else {
+      <h2>Agregar película</h2>
+      }
 
-    <label>
-      Imagen
-      <input
-        type="text"
-        formControlName="imagen"
-        placeholder="/images/movies/pelicula.jpg"
-      >
-    </label>
+      <form [formGroup]="movieForm" (ngSubmit)="saveMovie()">
 
-    <label>
-      Duración
-      <input
-        type="number"
-        formControlName="duracion"
-      >
-    </label>
+        <label>
+          Nombre
+          <input type="text" formControlName="nombre">
+        </label>
 
-    <label>
-      Sinopsis
-      <textarea
-        formControlName="sinopsis"
-      ></textarea>
-    </label>
+        <label>
+          Imagen
+          <input type="text" formControlName="imagen" placeholder="pelicula.jpg">
+        </label>
 
-    <label>
-      Géneros
-      <input
-        type="text"
-        formControlName="generos"
-        placeholder="Drama, Suspenso"
-      >
-    </label>
+        <label>
+          Duración
+          <input type="number" formControlName="duracion">
+        </label>
 
-    <label>
-      Edad mínima
-      <input
-        type="number"
-        formControlName="edadMinima"
-      >
-    </label>
+        <label>
+          Sinopsis
+          <textarea formControlName="sinopsis"></textarea>
+        </label>
 
-    <button type="submit">
-      Agregar película
-    </button>
+        <label>
+          Géneros
+          <input type="text" formControlName="generos" placeholder="Drama, Suspenso, Acción">
+        </label>
 
-  </form>
+        <label>
+          Edad mínima
+          <input type="number" formControlName="edadMinima">
+        </label>
+
+        <button type="submit">
+          @if (editingMovieId() !== null) {
+          Guardar cambios
+          } @else {
+          Agregar película
+          }
+        </button>
+
+        @if (editingMovieId() !== null) {
+        <button type="button" (click)="cancelEdit()">
+          Cancelar edición
+        </button>
+        }
+
+      </form>
+
+    </section>
+
+
+    <!-- FUNCIONES -->
+    <section class="admin-form-section">
+
+      <h2>Agregar función</h2>
+
+      <form [formGroup]="showtimeForm" (ngSubmit)="createShowtime()">
+
+        <label>
+          Película
+
+          <select formControlName="movieId">
+            <option [value]="0">
+              Seleccionar película
+            </option>
+
+            @for (movie of movies(); track movie.id) {
+            <option [value]="movie.id">
+              {{ movie.nombre }}
+            </option>
+            }
+          </select>
+        </label>
+
+        <label>
+          Fecha
+          <input type="date" formControlName="fecha">
+        </label>
+
+        <label>
+          Hora
+          <input type="time" formControlName="hora">
+        </label>
+
+        <label>
+          Formato
+
+          <select formControlName="formato">
+            <option value="">
+              Seleccionar formato
+            </option>
+
+            <option value="2D">2D</option>
+            <option value="3D">3D</option>
+            <option value="4D">4D</option>
+            <option value="5D">5D</option>
+          </select>
+        </label>
+
+        <label>
+          Idioma
+
+          <select formControlName="idioma">
+            <option value="">
+              Seleccionar idioma
+            </option>
+
+            <option value="Español">
+              Español
+            </option>
+
+            <option value="Subtitulada">
+              Subtitulada
+            </option>
+          </select>
+        </label>
+
+        <label>
+          Precio
+          <input type="number" formControlName="precio">
+        </label>
+
+        <button type="submit">
+          Crear función
+        </button>
+        @if (showtimeMessage()) {
+        <p class="success-message">
+          {{ showtimeMessage() }}
+        </p>
+        }
+        @if (showtimeError()) {
+        <p class="error-message">
+          {{ showtimeError() }}
+        </p>
+        }
+
+      </form>
+
+    </section>
+
+  </div>
+
+
+  <!-- LISTADO -->
+  <section class="movies-section">
+
+    <h2>Películas</h2>
+
+    <div class="movie-list">
+
+      @for (movie of movies(); track movie.id) {
+
+      <article class="movie-admin-card">
+
+        <img [src]="movie.imagen" [alt]="movie.nombre">
+
+        <div class="movie-admin-info">
+
+          <h3>
+            {{ movie.nombre }}
+          </h3>
+
+          <p>
+            {{ movie.duracion }} minutos
+          </p>
+
+          <p>
+            +{{ movie.edadMinima }}
+          </p>
+
+          <p>
+            {{ movie.generos.join(', ') }}
+          </p>
+
+        </div>
+
+        <div class="movie-actions">
+
+          <button type="button" (click)="editMovie(movie)">
+            Editar
+          </button>
+
+          <button type="button" (click)="deleteMovie(movie.id)">
+            Eliminar
+          </button>
+
+        </div>
+
+      </article>
+
+      }
+
+    </div>
+
+  </section>
+  <section class="showtimes-section">
+
+    <h2>Funciones</h2>
+
+    <div class="showtime-list">
+
+      @for (showtime of showtimes(); track showtime.id) {
+
+      <article class="showtime-card">
+
+        <div>
+          <h3>{{ showtime.movies?.nombre }}</h3>
+
+          <p>
+            {{ showtime.fecha }} - {{ showtime.hora }}
+          </p>
+
+          <p>
+            {{ showtime.rooms?.nombre }}
+          </p>
+
+          <p>
+            {{ showtime.formato }} - {{ showtime.idioma }}
+          </p>
+
+          <p>
+            ${{ showtime.precio }}
+          </p>
+        </div>
+        <button type="button" (click)="deleteShowtime(showtime.id)">
+            Eliminar
+        </button>
+
+      </article>
+
+      }
+
+    </div>
+
+  </section>
 
 </section>
