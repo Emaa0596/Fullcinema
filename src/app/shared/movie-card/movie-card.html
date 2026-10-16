@@ -18,9 +18,9 @@
       {{ movie().sinopsis }}
     </p>
 
-    <button type="button">
+    <a class="showtimes-button" [routerLink]="['/movies', movie().id, 'showtimes']">
       Ver funciones
-    </button>
+    </a>
 
   </div>
 

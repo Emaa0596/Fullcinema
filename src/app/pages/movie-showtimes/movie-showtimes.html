@@ -1,0 +1,55 @@
+<section class="movie-showtimes">
+
+  <h1>Funciones disponibles</h1>
+
+  @if (showtimes().length > 0) {
+
+    <div class="showtime-list">
+
+      @for (showtime of showtimes(); track showtime.id) {
+
+        <article class="showtime-card">
+
+          <div>
+            <h2>
+              {{ showtime.movies?.nombre }}
+            </h2>
+
+            <p>
+              {{ showtime.fecha }} - {{ showtime.hora }}
+            </p>
+
+            <p>
+              {{ showtime.formato }} · {{ showtime.idioma }}
+            </p>
+
+            <p>
+              {{ showtime.rooms?.nombre }}
+            </p>
+
+            <p>
+              ${{ showtime.precio }}
+            </p>
+          </div>
+
+          <a
+            [routerLink]="['/showtime', showtime.id, 'seats']"
+          >
+            Elegir butacas
+          </a>
+
+        </article>
+
+      }
+
+    </div>
+
+  } @else {
+
+    <p>
+      No hay funciones disponibles para esta película.
+    </p>
+
+  }
+
+</section>

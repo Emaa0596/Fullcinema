@@ -1,5 +1,4 @@
 import { Injectable, inject, signal } from '@angular/core';
-
 import { AuthService } from './auth.service';
 import { ProfileService } from './profile.service';
 import { ProfileData } from '../models/profile.model';
@@ -8,16 +7,12 @@ import { ProfileData } from '../models/profile.model';
   providedIn: 'root'
 })
 export class ProfileStore {
-
   private readonly auth = inject(AuthService);
   private readonly profileService = inject(ProfileService);
-
   readonly profile = signal<ProfileData | null>(null);
   readonly loading = signal(false);
-
   async loadProfile() {
     await this.auth.initialized;
-
     const session = this.auth.session();
 
     if (!session) {

@@ -10,19 +10,14 @@ export const adminGuard: CanActivateFn = async () => {
   const auth = inject(AuthService);
   const profileStore = inject(ProfileStore);
   const router = inject(Router);
-
   await auth.initialized;
-
   const session = auth.session();
-
   if (!session) {
     return router.parseUrl('/login');
   }
-
   await profileStore.loadProfile();
-
+  
   const profile = profileStore.profile();
-
   if (!profile) {
     return router.parseUrl('/home');
   }

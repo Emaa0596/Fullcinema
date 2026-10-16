@@ -12,6 +12,15 @@ export class ShowtimeService {
         .select(`*,movies (id, nombre,duracion),rooms (id,nombre)`).order('fecha', { ascending: true }).order('hora', { ascending: true });
     }
 
+    getShowtimesByMovie(movieId: number) {
+        return supabase
+        .from('showtimes')
+        .select(`*,movies (id,nombre,imagen,duracion),rooms (id,nombre)`)
+        .eq('movie_id', movieId)
+        .order('fecha', { ascending: true })
+        .order('hora', { ascending: true });
+    }
+
     async createShowtime(showtime: {movieId: number; fecha: string; hora: string; formato: string; idioma: string; precio: number;}){
         // 1. Buscamos duración de la película
         const { data: movie, error: movieError } = await supabase.from('movies').select('duracion').eq('id', showtime.movieId).single();

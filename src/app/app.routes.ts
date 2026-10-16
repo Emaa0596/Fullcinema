@@ -10,6 +10,8 @@ import { adminGuard } from './guards/admin.guard';
 import { Admin } from './pages/admin/admin';
 import { Employee } from './pages/employee/employee';
 import { employeeGuard } from './guards/employee.guard';
+import { SeatSelection } from './pages/seat-selection/seat-selection';
+import { MovieShowtimes } from './pages/movie-showtimes/movie-showtimes';
 
 export const routes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -20,5 +22,8 @@ export const routes: Routes = [
     {path: 'complete-profile', component: CompleteProfile, canActivate: [authGuard]},
     {path: 'oauth-callback', component: OauthCallback},
     {path: 'admin', component: Admin, canActivate: [adminGuard]},
-    {path: 'employee', component: Employee, canActivate: [employeeGuard]}
+    {path: 'employee', component: Employee, canActivate: [employeeGuard]},
+    {path: 'showtime/:id/seats',component: SeatSelection},
+    {path: 'movies/:id/showtimes',  component: MovieShowtimes}
 ];
+    

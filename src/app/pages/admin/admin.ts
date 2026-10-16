@@ -82,21 +82,16 @@ export class Admin {
     this.showtimeForm.reset({movieId: 0,fecha: '',hora: '',formato: '',idioma: '',precio: 0});
   }
 
-  async deleteShowtime(id: number) {const confirmed = confirm('¿Seguro que querés eliminar esta función?');
-
-  if (!confirmed) {
-    return;
+  async deleteShowtime(id: number) {
+    const confirmed = confirm('¿Seguro que querés eliminar esta función?');
+    if (!confirmed) { return; }
+    const { error } = await this.showtimeService.deleteShowtime(id);
+    if (error) {
+      console.error('Error eliminando función:', error);
+      return;
+    }
+    await this.loadShowtimes();
   }
-
-  const { error } = await this.showtimeService.deleteShowtime(id);
-
-  if (error) {
-    console.error('Error eliminando función:', error);
-    return;
-  }
-
-  await this.loadShowtimes();
-}
 
   private async loadMovies() {
     const { data, error } = await this.movieService.getMovies();

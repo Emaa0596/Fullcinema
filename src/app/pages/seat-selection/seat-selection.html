@@ -1,0 +1,145 @@
+<section class="seat-selection">
+
+  <h1>Seleccioná tus butacas</h1>
+
+  <div class="screen">
+    PANTALLA
+  </div>
+
+  <div class="room">
+
+    @for (row of getRows(); track row) {
+
+      <div class="seat-row">
+
+        <span class="row-name">
+          {{ row }}
+        </span>
+
+        <div class="seat-row">
+
+  <div class="seat-blocks">
+
+    <div class="seat-block">
+      @for (
+        seat of getSeatsByBlock(row, 'left');
+        track seat.id
+      ) {
+        <button
+          type="button"
+          class="seat"
+          [class.occupied]="isOccupied(seat.id)"
+          [class.selected]="isSelected(seat.id)"
+          [class.vip]="seat.tipo === 'vip'"
+          [class.accessible]="seat.tipo === 'accessible'"
+          (click)="toggleSeat(seat.id)"
+          [disabled]="isOccupied(seat.id)"
+        >
+          {{ seat.numero }}
+        </button>
+      }
+    </div>
+
+    <div class="seat-block center-block">
+      @for (
+        seat of getSeatsByBlock(row, 'center');
+        track seat.id
+      ) {
+        <button
+          type="button"
+          class="seat"
+          [class.occupied]="isOccupied(seat.id)"
+          [class.selected]="isSelected(seat.id)"
+          [class.vip]="seat.tipo === 'vip'"
+          [class.accessible]="seat.tipo === 'accessible'"
+          (click)="toggleSeat(seat.id)"
+          [disabled]="isOccupied(seat.id)"
+        >
+          {{ seat.numero }}
+        </button>
+      }
+    </div>
+
+    <div class="seat-block">
+      @for (seat of getSeatsByBlock(row, 'right'); track seat.id) {
+        <button
+          type="button"
+          class="seat"
+          [class.occupied]="isOccupied(seat.id)"
+          [class.selected]="isSelected(seat.id)"
+          [class.vip]="seat.tipo === 'vip'"
+          [class.accessible]="seat.tipo === 'accessible'"
+          (click)="toggleSeat(seat.id)"
+          [disabled]="isOccupied(seat.id)">
+          {{ seat.numero }}
+        </button>
+      }
+    </div>
+
+  </div>
+
+</div>
+
+      </div>
+
+    }
+
+  </div>
+
+  <div class="seat-summary">
+
+  <h2>Tu selección</h2>
+
+  @if (selectedSeatData().length > 0) {
+
+    <div class="selected-seat-list">
+
+      @for (seat of selectedSeatData(); track seat.id) {
+        <span class="selected-seat">
+          {{ seat.fila }}{{ seat.numero }}
+        </span>
+      }
+
+    </div>
+
+    <p>
+      Cantidad:
+      {{ selectedSeatData().length }}
+    </p>
+
+    <button
+      type="button"
+      class="continue-button"
+      (click)="confirmPurchase()"
+      [disabled]="purchasing()"
+    >
+      @if (purchasing()) {
+        Procesando...
+      } @else {
+        Confirmar compra
+      }
+    </button>
+
+  } @else if (!purchaseMessage()) {
+
+    <p>
+      Seleccioná al menos una butaca para continuar.
+    </p>
+
+  }
+
+  @if (purchaseMessage()) {
+    <p class="success-message">
+      {{ purchaseMessage() }}
+    </p>
+  }
+
+  @if (purchaseError()) {
+    <p class="error-message">
+      {{ purchaseError() }}
+    </p>
+  }
+
+</div>
+
+</section>
