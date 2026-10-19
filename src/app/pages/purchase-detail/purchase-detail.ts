@@ -1,11 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { QRCodeComponent } from 'angularx-qrcode';
 import { PurchaseService } from '../../services/purchase.service';
 
 @Component({
   selector: 'app-purchase-detail',
-  imports: [DatePipe],
+  imports: [DatePipe, QRCodeComponent],
   templateUrl: './purchase-detail.html',
   styleUrl: './purchase-detail.css'
 })
@@ -47,7 +48,7 @@ export class PurchaseDetail {
 
       return;
     }
-
+    console.log('PURCHASE DETAIL:', data);
     this.purchase.set(data);
   }
 }

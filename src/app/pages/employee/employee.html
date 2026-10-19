@@ -1,7 +1,90 @@
-<section class="employee">
-  <h1>Panel de empleado</h1>
+<section class="employee-page">
 
-  <p>
-    Desde acá se validarán entradas mediante QR o código manual.
-  </p>
+  <div class="validator-card">
+
+    <h1>Validación de entradas</h1>
+
+    <p>
+      Escaneá el QR o ingresá manualmente el código del ticket.
+    </p>
+
+    <form (ngSubmit)="validateTicket()">
+
+      <label for="ticket-code">
+        Código del ticket
+      </label>
+
+      <input
+        id="ticket-code"
+        name="ticket-code"
+        type="text"
+        [ngModel]="code()"
+        (ngModelChange)="code.set($event)"
+        placeholder="Ej: 0eb8100d-d499..."
+      >
+
+      <button
+        type="submit"
+        [disabled]="validating()"
+      >
+        @if (validating()) {
+          Validando...
+        } @else {
+          Validar entrada
+        }
+      </button>
+
+    </form>
+
+    @if (!scannerVisible()) {
+
+      <button
+        type="button"
+        (click)="scanQr()"
+      >
+        Escanear QR
+      </button>
+
+    } @else {
+
+      <button
+        type="button"
+        (click)="hideScanner()"
+      >
+        Ocultar cámara
+      </button>
+
+    }
+
+    <div
+      class="scanner-container"
+      [hidden]="!scannerVisible()"
+    >
+
+      <zxing-scanner
+        [enable]="scannerEnabled()"
+        [device]="selectedCamera()"
+        (camerasFound)="onCamerasFound($event)"
+        (permissionResponse)="onPermissionResponse($event)"
+        (scanSuccess)="onCodeScanned($event)"
+        (scanError)="onScanError($event)"
+      >
+      </zxing-scanner>
+
+    </div>
+
+    @if (successMessage()) {
+      <div class="success-message">
+        {{ successMessage() }}
+      </div>
+    }
+
+    @if (errorMessage()) {
+      <div class="error-message">
+        {{ errorMessage() }}
+      </div>
+    }
+
+  </div>
+
 </section>

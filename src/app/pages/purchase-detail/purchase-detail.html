@@ -96,6 +96,31 @@
           ${{ purchase.total }}
         </p>
 
+        @if (purchase.tickets; as ticket) {
+
+          <div class="ticket-section">
+
+            <h3>Tu entrada</h3>
+
+            <qrcode
+              [qrdata]="ticket.code"
+              [width]="220"
+              [errorCorrectionLevel]="'M'"
+            ></qrcode>
+
+            <p>
+              <strong>Código:</strong>
+              {{ ticket.code }}
+            </p>
+
+            <p>
+              <strong>Estado del ticket:</strong>
+              {{ ticket.status }}
+            </p>
+
+          </div>
+        }
+
       </div>
 
       <p class="status">
