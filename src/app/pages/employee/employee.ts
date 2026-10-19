@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnDestroy} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
@@ -10,7 +10,7 @@ import { TicketService } from '../../services/ticket.service';
   templateUrl: './employee.html',
   styleUrl: './employee.css'
 })
-export class Employee {
+export class Employee implements OnDestroy {
 
   private readonly ticketService = inject(TicketService);
 
@@ -128,5 +128,9 @@ export class Employee {
     */
     this.scanLocked.set(true);
     this.scannerVisible.set(false);
+  }
+
+  ngOnDestroy() {
+    this.scannerEnabled.set(false);
   }
 }
