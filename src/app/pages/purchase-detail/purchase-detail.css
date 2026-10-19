@@ -1,0 +1,71 @@
+.purchase-detail {
+  min-height: 100vh;
+  padding: 40px 20px;
+
+  display: flex;
+  justify-content: center;
+
+  background: #0d0d0f;
+  color: white;
+}
+
+.purchase-card {
+  width: 100%;
+  max-width: 650px;
+
+  padding: 32px;
+
+  background: #18181d;
+
+  border: 1px solid #333;
+  border-radius: 14px;
+}
+
+.purchase-card h1 {
+  margin-top: 0;
+}
+
+.purchase-number {
+  color: #aaa;
+}
+
+.purchase-info {
+  display: grid;
+  gap: 8px;
+}
+
+.seat-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.seat-ticket {
+  padding: 8px 12px;
+
+  background: #e5b34c;
+  color: #111;
+
+  border-radius: 6px;
+
+  font-weight: 700;
+}
+
+.purchase-totals {
+  margin-top: 20px;
+}
+
+.total {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.status {
+  margin-top: 20px;
+
+  color: #7edc8b;
+}
+
+.error-message {
+  color: #ff7373;
+}

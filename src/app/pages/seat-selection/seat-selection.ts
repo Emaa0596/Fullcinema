@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SeatService } from '../../services/seat.service';
 import { Seat } from '../../models/seat.model';
 import { ShowtimeSeat } from '../../models/showtime-seat.model';
@@ -14,6 +14,7 @@ import { PurchaseService } from '../../services/purchase.service';
 export class SeatSelection {
 
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly seatService = inject(SeatService);
 
   readonly seats = signal<Seat[]>([]);
@@ -25,6 +26,7 @@ export class SeatSelection {
   readonly purchaseMessage = signal('');
   readonly purchaseError = signal('');
   readonly purchasing = signal(false);
+  readonly purchaseId = signal<number | null>(null);
 
   constructor() {
     this.loadSeats();
@@ -101,21 +103,14 @@ export class SeatSelection {
 
     if (error) {
       console.error('Error creando compra:', error);
-
       this.purchaseError.set('No se pudo completar la compra. Alguna butaca puede haber sido ocupada.');
 
       // Volvemos a consultar el estado actual de la sala.
       await this.loadSeats();
-
       return;
     }
 
-    this.purchaseMessage.set(`Compra realizada correctamente. ID: ${data}`);
+    this.purchaseId.set(data);
     this.selectedSeats.set([]);
-
-    // Actualizamos el mapa para mostrar las nuevas ocupadas.
-    await this.loadSeats();
-  }
-
-  
+    await this.router.navigate(['/purchase', data]);}
 }

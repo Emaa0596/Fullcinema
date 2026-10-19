@@ -1,0 +1,109 @@
+<section class="purchase-detail">
+
+  @if (loading()) {
+
+    <p>Cargando compra...</p>
+
+  } @else if (errorMessage()) {
+
+    <p class="error-message">
+      {{ errorMessage() }}
+    </p>
+
+  } @else if (purchase(); as purchase) {
+
+    <div class="purchase-card">
+
+      <h1>Compra realizada</h1>
+
+      <p class="purchase-number">
+        Compra #{{ purchase.id }}
+      </p>
+
+      <hr>
+
+      <h2>
+        {{ purchase.showtimes?.movies?.nombre }}
+      </h2>
+
+      <div class="purchase-info">
+
+        <p>
+          <strong>Fecha:</strong>
+          {{ purchase.showtimes?.fecha | date:'dd/MM/yyyy' }}
+        </p>
+
+        <p>
+          <strong>Horario:</strong>
+          {{ purchase.showtimes?.hora?.slice(0, 5) }}
+        </p>
+
+        <p>
+          <strong>Sala:</strong>
+          {{ purchase.showtimes?.rooms?.nombre }}
+        </p>
+
+        <p>
+          <strong>Formato:</strong>
+          {{ purchase.showtimes?.formato }}
+        </p>
+
+        <p>
+          <strong>Idioma:</strong>
+          {{ purchase.showtimes?.idioma }}
+        </p>
+
+      </div>
+
+      <hr>
+
+      <h3>Butacas</h3>
+
+      <div class="seat-list">
+
+        @for (
+          item of purchase.showtime_seats;
+          track item.seat_id
+        ) {
+
+          <span class="seat-ticket">
+            {{ item.seats?.fila }}
+            {{ item.seats?.numero }}
+          </span>
+
+        }
+
+      </div>
+
+      <hr>
+
+      <div class="purchase-totals">
+
+        <p>
+          Subtotal:
+          ${{ purchase.subtotal }}
+        </p>
+
+        @if (purchase.descuento > 0) {
+          <p>
+            Descuento:
+            ${{ purchase.descuento }}
+          </p>
+        }
+
+        <p class="total">
+          Total:
+          ${{ purchase.total }}
+        </p>
+
+      </div>
+
+      <p class="status">
+        Estado: {{ purchase.status }}
+      </p>
+
+    </div>
+
+  }
+
+</section>

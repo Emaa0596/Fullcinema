@@ -21,10 +21,7 @@
   <div class="seat-blocks">
 
     <div class="seat-block">
-      @for (
-        seat of getSeatsByBlock(row, 'left');
-        track seat.id
-      ) {
+      @for (seat of getSeatsByBlock(row, 'left'); track seat.id){
         <button
           type="button"
           class="seat"
@@ -41,10 +38,7 @@
     </div>
 
     <div class="seat-block center-block">
-      @for (
-        seat of getSeatsByBlock(row, 'center');
-        track seat.id
-      ) {
+      @for (seat of getSeatsByBlock(row, 'center'); track seat.id){
         <button
           type="button"
           class="seat"
@@ -80,7 +74,7 @@
 
 </div>
 
-      </div>
+    </div>
 
     }
 
