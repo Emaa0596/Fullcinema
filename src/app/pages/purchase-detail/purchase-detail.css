@@ -83,3 +83,34 @@
   display: inline-block;
   margin: 20px 0;
 }
+
+.pdf-button {
+  width: 100%;
+  margin-top: 24px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #e5b34c;
+  color: #111;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.pdf-button:hover {
+  transform: translateY(-1px);
+}
+.pdf-button:hover {
+  transform: translateY(-1px);
+}
+
+.pdf-button:active {
+  transform: translateY(0);
+}
+
+.pdf-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+

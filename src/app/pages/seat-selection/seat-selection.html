@@ -10,69 +10,52 @@
 
     @for (row of getRows(); track row) {
 
+    <div class="seat-row">
+
+      <span class="row-name">
+        {{ row }}
+      </span>
+
       <div class="seat-row">
 
-        <span class="row-name">
-          {{ row }}
-        </span>
+        <div class="seat-blocks">
 
-        <div class="seat-row">
+          <div class="seat-block">
+            @for (seat of getSeatsByBlock(row, 'left'); track seat.id){
+            <button type="button" class="seat" [class.occupied]="isOccupied(seat.id)"
+              [class.selected]="isSelected(seat.id)" [class.vip]="seat.tipo === 'vip'"
+              [class.accessible]="seat.tipo === 'accessible'" (click)="toggleSeat(seat.id)"
+              [disabled]="isOccupied(seat.id)">
+              {{ seat.numero }}
+            </button>
+            }
+          </div>
 
-  <div class="seat-blocks">
+          <div class="seat-block center-block">
+            @for (seat of getSeatsByBlock(row, 'center'); track seat.id){
+            <button type="button" class="seat" [class.occupied]="isOccupied(seat.id)"
+              [class.selected]="isSelected(seat.id)" [class.vip]="seat.tipo === 'vip'"
+              [class.accessible]="seat.tipo === 'accessible'" (click)="toggleSeat(seat.id)"
+              [disabled]="isOccupied(seat.id)">
+              {{ seat.numero }}
+            </button>
+            }
+          </div>
 
-    <div class="seat-block">
-      @for (seat of getSeatsByBlock(row, 'left'); track seat.id){
-        <button
-          type="button"
-          class="seat"
-          [class.occupied]="isOccupied(seat.id)"
-          [class.selected]="isSelected(seat.id)"
-          [class.vip]="seat.tipo === 'vip'"
-          [class.accessible]="seat.tipo === 'accessible'"
-          (click)="toggleSeat(seat.id)"
-          [disabled]="isOccupied(seat.id)"
-        >
-          {{ seat.numero }}
-        </button>
-      }
-    </div>
+          <div class="seat-block">
+            @for (seat of getSeatsByBlock(row, 'right'); track seat.id) {
+            <button type="button" class="seat" [class.occupied]="isOccupied(seat.id)"
+              [class.selected]="isSelected(seat.id)" [class.vip]="seat.tipo === 'vip'"
+              [class.accessible]="seat.tipo === 'accessible'" (click)="toggleSeat(seat.id)"
+              [disabled]="isOccupied(seat.id)">
+              {{ seat.numero }}
+            </button>
+            }
+          </div>
 
-    <div class="seat-block center-block">
-      @for (seat of getSeatsByBlock(row, 'center'); track seat.id){
-        <button
-          type="button"
-          class="seat"
-          [class.occupied]="isOccupied(seat.id)"
-          [class.selected]="isSelected(seat.id)"
-          [class.vip]="seat.tipo === 'vip'"
-          [class.accessible]="seat.tipo === 'accessible'"
-          (click)="toggleSeat(seat.id)"
-          [disabled]="isOccupied(seat.id)"
-        >
-          {{ seat.numero }}
-        </button>
-      }
-    </div>
+        </div>
 
-    <div class="seat-block">
-      @for (seat of getSeatsByBlock(row, 'right'); track seat.id) {
-        <button
-          type="button"
-          class="seat"
-          [class.occupied]="isOccupied(seat.id)"
-          [class.selected]="isSelected(seat.id)"
-          [class.vip]="seat.tipo === 'vip'"
-          [class.accessible]="seat.tipo === 'accessible'"
-          (click)="toggleSeat(seat.id)"
-          [disabled]="isOccupied(seat.id)">
-          {{ seat.numero }}
-        </button>
-      }
-    </div>
-
-  </div>
-
-</div>
+      </div>
 
     </div>
 
@@ -82,16 +65,16 @@
 
   <div class="seat-summary">
 
-  <h2>Tu selección</h2>
+    <h2>Tu selección</h2>
 
-  @if (selectedSeatData().length > 0) {
+    @if (selectedSeatData().length > 0) {
 
     <div class="selected-seat-list">
 
       @for (seat of selectedSeatData(); track seat.id) {
-        <span class="selected-seat">
-          {{ seat.fila }}{{ seat.numero }}
-        </span>
+      <span class="selected-seat">
+        {{ seat.fila }}{{ seat.numero }}
+      </span>
       }
 
     </div>
@@ -101,39 +84,91 @@
       {{ selectedSeatData().length }}
     </p>
 
-    <button
-      type="button"
-      class="continue-button"
-      (click)="confirmPurchase()"
-      [disabled]="purchasing()"
-    >
+    @if (!isLoggedIn()) {
+    <div class="guest-data">
+      <label for="guest-email">
+        Email para recibir la entrada
+      </label>
+
+      <input id="guest-email" type="email" [value]="guestEmail()" (input)="guestEmail.set($any($event.target).value)"
+        placeholder="tu@email.com">
+
+      <label for="guest-birth-date">
+        Fecha de nacimiento
+      </label>
+
+      <input id="guest-birth-date" type="date" [value]="guestBirthDate()"
+        (input)="guestBirthDate.set($any($event.target).value)">
+    </div>
+    }
+
+    <button type="button" class="continue-button" (click)="confirmPurchase()" [disabled]="purchasing()">
       @if (purchasing()) {
-        Procesando...
+      Procesando...
       } @else {
-        Confirmar compra
+      Confirmar compra
       }
     </button>
 
-  } @else if (!purchaseMessage()) {
+    } @else if (!purchaseMessage()) {
 
     <p>
       Seleccioná al menos una butaca para continuar.
     </p>
 
-  }
+    }
 
-  @if (purchaseMessage()) {
+    @if (purchaseMessage()) {
     <p class="success-message">
       {{ purchaseMessage() }}
     </p>
-  }
+    }
 
-  @if (purchaseError()) {
+    @if (purchaseError()) {
     <p class="error-message">
       {{ purchaseError() }}
     </p>
-  }
+    }
 
-</div>
+  </div>
+  @if (ageNoticeVisible()) {
+
+  <div class="modal-backdrop">
+
+    <div class="age-modal">
+
+      <h2>Aviso de restricción de edad</h2>
+
+      <p>
+        Esta película posee una restricción para mayores de
+        {{ movieMinimumAge() }} años.
+      </p>
+
+      <p>
+        Los menores de 18 años deben concurrir acompañados por un adulto.
+      </p>
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          (click)="ageNoticeVisible.set(false)"
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          (click)="acceptAgeNotice()"
+        >
+          Entendido, continuar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+  }
 
 </section>

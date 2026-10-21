@@ -39,7 +39,6 @@
         </p>
 
         <p>
-          <strong>Sala:</strong>
           {{ purchase.showtimes?.rooms?.nombre }}
         </p>
 
@@ -61,10 +60,7 @@
 
       <div class="seat-list">
 
-        @for (
-          item of purchase.showtime_seats;
-          track item.seat_id
-        ) {
+        @for (item of purchase.showtime_seats; track item.seat_id) {
 
           <span class="seat-ticket">
             {{ item.seats?.fila }}
@@ -96,36 +92,42 @@
           ${{ purchase.total }}
         </p>
 
-        @if (purchase.tickets; as ticket) {
+      </div>
 
-          <div class="ticket-section">
+      @if (purchase.tickets; as ticket) {
 
-            <h3>Tu entrada</h3>
+        <div class="ticket-section">
 
+          <h3>Tu entrada</h3>
+
+          <div id="ticket-qr">
             <qrcode
               [qrdata]="ticket.code"
               [width]="220"
               [errorCorrectionLevel]="'M'"
             ></qrcode>
-
-            <p>
-              <strong>Código:</strong>
-              {{ ticket.code }}
-            </p>
-
-            <p>
-              <strong>Estado del ticket:</strong>
-              {{ ticket.status }}
-            </p>
-
           </div>
-        }
 
-      </div>
+          <p>
+            <strong>Código:</strong>
+            {{ ticket.code }}
+          </p>
+
+        </div>
+
+      }
 
       <p class="status">
         Estado: {{ purchase.status }}
       </p>
+
+      <button
+        type="button"
+        class="pdf-button"
+        (click)="generatePdf()"
+      >
+        Descargar entrada PDF
+      </button>
 
     </div>
 

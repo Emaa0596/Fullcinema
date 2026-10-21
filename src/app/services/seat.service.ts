@@ -10,10 +10,10 @@ export class SeatService {
 
     // 1. Buscamos la sala de la función
     const { data: showtime, error: showtimeError } = await supabase
-      .from('showtimes')
-      .select('room_id')
-      .eq('id', showtimeId)
-      .single();
+    .from('showtimes')
+    .select(`room_id, movies (edad_minima)`)
+    .eq('id', showtimeId)
+    .single();
 
     if (showtimeError || !showtime) {return { data: null, error: showtimeError ?? new Error('Función no encontrada')};}
 
@@ -35,7 +35,28 @@ export class SeatService {
 
     if (occupiedError) { return { data: null, error: occupiedError};}
 
-    return {data: {seats, occupiedSeats}, error: null};
+    const movie = Array.isArray(showtime.movies) ? showtime.movies[0] : showtime.movies;
+
+    return {data: {
+        seats,
+        occupiedSeats,
+        minimumAge: movie?.edad_minima ?? 0
+      },
+      error: null
+    };
     
-    }
+  }
+
+  subscribeToShowtimeSeats(showtimeId: number, onChange: () => void) {
+    return supabase
+      .channel(`showtime-seats-${showtimeId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'showtime_seats',
+          filter: `showtime_id=eq.${showtimeId}`
+        },() => {onChange();}).subscribe();
+  }
 }
