@@ -13,12 +13,13 @@ export class PurchaseService {
       p_seat_ids: purchase.seatIds,
       p_email: purchase.email,
       p_birth_date: purchase.birthDate,
-      p_age_notice_accepted: purchase.ageNoticeAccepted
+      p_age_notice_accepted: purchase.ageNoticeAccepted,
+      p_use_credit: purchase.useCredit
     });
   }
 
   getPurchaseById(purchaseId: number) {
-  return supabase.from('purchases').select(`id, subtotal, descuento, total, status, email, created_at,
+  return supabase.from('purchases').select(`id, subtotal, descuento, credito_usado, total, status, email, created_at,
       showtimes (id, fecha, hora, formato, idioma, precio,
         movies (id, nombre, imagen),
         rooms (id, nombre)),
@@ -34,6 +35,20 @@ export class PurchaseService {
       p_purchase_id: purchaseId,
       p_ticket_code: ticketCode
     });
+  }
+
+  cancelPurchase(purchaseId: number) {
+    return supabase.rpc('cancel_purchase', {
+      p_purchase_id: purchaseId});
+  }
+
+  getMyPurchases() {
+    return supabase
+      .from('purchases')
+      .select(`id,subtotal,descuento,credito_usado,total,status,created_at,
+        showtimes (id,fecha,hora,formato,idioma,
+        movies (id,nombre,imagen,duracion),
+        rooms (id,nombre)))`).order('created_at', { ascending: false });
   }
 
 }

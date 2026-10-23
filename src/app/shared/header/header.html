@@ -27,6 +27,10 @@
       Perfil
     </a>
 
+    <a routerLink="/my-purchases">
+      Mis compras
+    </a>
+
     @if (profileStore.profile()?.rol === Role.Admin) {
     <a routerLink="/admin">
       Admin

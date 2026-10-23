@@ -101,9 +101,6 @@
 .pdf-button:hover {
   transform: translateY(-1px);
 }
-.pdf-button:hover {
-  transform: translateY(-1px);
-}
 
 .pdf-button:active {
   transform: translateY(0);
@@ -114,3 +111,31 @@
   cursor: not-allowed;
 }
 
+
+
+
+.cancel-button {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px 18px;
+
+  border: 1px solid #ff7373;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #ff7373;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background: rgba(255, 115, 115, 0.1);
+}
+
+.cancel-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

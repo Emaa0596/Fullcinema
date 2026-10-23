@@ -1,0 +1,306 @@
+.profile-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #0d0d0f;
+  color: white;
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+}
+
+
+/* PERFIL */
+
+.profile-card {
+  padding: 30px;
+  background: #18181d;
+  border: 1px solid #333;
+  border-radius: 14px;
+}
+
+.profile-card h1 {
+  margin: 0 0 28px;
+  font-size: 2rem;
+}
+
+.profile-data {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 15px;
+  background: #202026;
+  border: 1px solid #333;
+  border-radius: 9px;
+}
+
+.profile-item span {
+  color: #999;
+  font-size: 13px;
+}
+
+.profile-item strong {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+/* CRÉDITO Y PUNTOS */
+
+.balance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.balance-card {
+  padding: 22px;
+  background: #18181d;
+  border: 1px solid #333;
+  border-radius: 12px;
+}
+
+.balance-card span {
+  display: block;
+  margin-bottom: 8px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.balance-card strong {
+  display: block;
+  color: #e5b34c;
+  font-size: 1.5rem;
+}
+
+.balance-card p {
+  margin: 10px 0 0;
+  color: #999;
+  font-size: 14px;
+}
+
+
+/* MENSAJES */
+
+.message {
+  margin-top: 20px;
+  padding: 14px 18px;
+  border-radius: 9px;
+}
+
+.success-message {
+  color: #7edc8b;
+  background: rgba(126, 220, 139, 0.08);
+  border: 1px solid rgba(126, 220, 139, 0.35);
+}
+
+.error-message {
+  color: #ff7373;
+  background: rgba(255, 115, 115, 0.08);
+  border: 1px solid rgba(255, 115, 115, 0.35);
+}
+
+
+/* RECOMPENSAS */
+
+.rewards-section {
+  margin-top: 40px;
+}
+
+.section-title {
+  margin-bottom: 18px;
+}
+
+.section-title h2 {
+  margin: 0;
+}
+
+.section-title p {
+  margin: 7px 0 0;
+  color: #999;
+}
+
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.reward-card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: #18181d;
+  border: 1px solid #333;
+  border-radius: 12px;
+}
+
+.reward-card.reward-disabled {
+  opacity: 0.65;
+}
+
+.reward-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reward-header h3 {
+  margin: 0;
+}
+
+.reward-cost {
+  color: #e5b34c;
+  font-weight: 700;
+}
+
+.reward-description {
+  flex: 1;
+  margin: 15px 0;
+  color: #aaa;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.reward-credit {
+  margin-bottom: 15px;
+  color: #7edc8b;
+  font-weight: 600;
+}
+
+.redeem-button {
+  width: 100%;
+  padding: 11px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #e5b34c;
+  color: #111;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.redeem-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.redeem-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.redeem-button.disabled {
+  background: #555;
+  color: #bbb;
+}
+
+
+/* HISTORIAL */
+
+.loyalty-section {
+  margin-top: 40px;
+}
+
+.loyalty-section h2 {
+  margin-bottom: 18px;
+}
+
+.loyalty-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loyalty-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 18px;
+  background: #18181d;
+  border: 1px solid #333;
+  border-radius: 10px;
+}
+
+.loyalty-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.loyalty-info strong {
+  font-size: 15px;
+}
+
+.loyalty-info p {
+  margin: 0;
+  color: #999;
+  font-size: 13px;
+}
+
+.loyalty-info small {
+  color: #777;
+}
+
+.points-value {
+  min-width: 100px;
+  text-align: right;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.points-value.positive {
+  color: #7edc8b;
+}
+
+.points-value.negative {
+  color: #ff7373;
+}
+
+
+/* ESTADOS */
+
+.empty-message {
+  padding: 20px;
+  background: #18181d;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #aaa;
+}
+
+.status-message {
+  text-align: center;
+  color: #aaa;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 700px) {
+
+  .profile-data {
+    grid-template-columns: 1fr;
+  }
+
+  .balance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rewards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .loyalty-item {
+    align-items: flex-start;
+  }
+
+}

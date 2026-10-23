@@ -4,4 +4,5 @@ export interface PurchaseRequest {
   email: string | null;
   birthDate: string | null;
   ageNoticeAccepted: boolean;
+  useCredit: boolean;
 }

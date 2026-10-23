@@ -6,20 +6,29 @@ import { supabase } from '../supabase.client';
 })
 export class ShowtimeService {
 
+    private getToday() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     getShowtimes() {
         return supabase
         .from('showtimes')
-        .select(`*,movies (id, nombre,duracion),rooms (id,nombre)`).order('fecha', { ascending: true }).order('hora', { ascending: true });
+        .select(`*,movies (id, nombre,duracion),rooms (id,nombre)`).gte('fecha', this.getToday()).order('fecha', { ascending: true }).order('hora', { ascending: true });
     }
 
     getShowtimesByMovie(movieId: number) {
         return supabase
-        .from('showtimes')
-        .select(`*,movies (id,nombre,imagen,duracion),rooms (id,nombre)`)
-        .eq('movie_id', movieId)
-        .order('fecha', { ascending: true })
-        .order('hora', { ascending: true });
-    }
+            .from('showtimes')
+            .select(`*,movies (id,nombre,imagen,duracion),rooms (id,nombre)`)
+            .eq('movie_id', movieId)
+            .gte('fecha', this.getToday())
+            .order('fecha', { ascending: true })
+            .order('hora', { ascending: true });
+        }
 
     async createShowtime(showtime: {movieId: number; fecha: string; hora: string; formato: string; idioma: string; precio: number;}){
         // 1. Buscamos duración de la película

@@ -129,6 +129,33 @@
         Descargar entrada PDF
       </button>
 
+      @if (purchase.status === 'confirmed') {
+    <button
+    type="button"
+    class="cancel-button"
+    (click)="cancelPurchase()"
+    [disabled]="cancelling()"
+    >
+    @if (cancelling()) {
+          Cancelando...
+        } @else {
+          Cancelar compra
+        }
+      </button>
+    }
+
+    @if (cancelMessage()) {
+      <p class="success-message">
+        {{ cancelMessage() }}
+      </p>
+    }
+
+    @if (cancelError()) {
+      <p class="error-message">
+        {{ cancelError() }}
+      </p>
+    }
+
     </div>
 
   }

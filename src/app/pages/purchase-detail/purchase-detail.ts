@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { jsPDF } from 'jspdf';
 import { PurchaseService } from '../../services/purchase.service';
+import { ProfileStore } from '../../services/profile.store.service';
 import { AuthService } from '../../services/auth.service';
 
 
@@ -19,10 +20,15 @@ export class PurchaseDetail {
   private readonly route = inject(ActivatedRoute);
   private readonly auth = inject(AuthService);
   private readonly purchaseService = inject(PurchaseService);
+  private readonly profileStore = inject(ProfileStore);
 
   readonly purchase = signal<any | null>(null);
   readonly loading = signal(true);
   readonly errorMessage = signal('');
+
+  readonly cancelling = signal(false);
+  readonly cancelMessage = signal('');
+  readonly cancelError = signal('');
 
   constructor() {
     this.loadPurchase();
@@ -70,6 +76,27 @@ export class PurchaseDetail {
     this.purchase.set(data);
   }
 
+  async cancelPurchase() {
+    const purchase = this.purchase();
+    if (!purchase) return;
+
+    this.cancelMessage.set('');
+    this.cancelError.set('');
+    this.cancelling.set(true);
+    const { data, error } = await this.purchaseService.cancelPurchase(purchase.id);
+
+    this.cancelling.set(false);
+    if (error) {
+      console.error('Error cancelando compra:', error);
+      this.cancelError.set(error.message);
+      return;
+    }
+
+    this.cancelMessage.set(`Compra cancelada. Se acreditaron $${data.credited_amount} a tu saldo.`);
+    await this.profileStore.loadProfile();
+    await this.loadPurchase();
+  }
+
   private formatDate(date: string) {
     if (!date) return '';
     const [year, month, day] = date.split('-');
@@ -81,10 +108,8 @@ export class PurchaseDetail {
     if (!purchase) return;
 
     const pdf = new jsPDF();
-
     pdf.setFontSize(20);
     pdf.text('FullCinema - Entrada', 20, 20);
-
     pdf.setFontSize(12);
     pdf.text(`Compra #${purchase.id}`, 20, 32);
     pdf.text(`Película: ${purchase.showtimes?.movies?.nombre}`, 20, 44);

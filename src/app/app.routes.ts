@@ -13,6 +13,7 @@ import { employeeGuard } from './guards/employee.guard';
 import { SeatSelection } from './pages/seat-selection/seat-selection';
 import { MovieShowtimes } from './pages/movie-showtimes/movie-showtimes';
 import { PurchaseDetail } from './pages/purchase-detail/purchase-detail';
+import { MyPurchases } from './pages/my-purchases/my-purchases';
 
 export const routes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -26,6 +27,7 @@ export const routes: Routes = [
     {path: 'employee', component: Employee, canActivate: [employeeGuard]},
     {path: 'showtime/:id/seats',component: SeatSelection},
     {path: 'movies/:id/showtimes',  component: MovieShowtimes},
-    {path: 'purchase/:id', component: PurchaseDetail}
+    {path: 'purchase/:id', component: PurchaseDetail},
+    {path: 'my-purchases', component: MyPurchases, canActivate: [authGuard]}
 ];
     

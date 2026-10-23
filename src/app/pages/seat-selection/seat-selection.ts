@@ -43,6 +43,10 @@ export class SeatSelection implements OnDestroy {
   readonly ageNoticeVisible = signal(false);
   readonly ageNoticeAccepted = signal(false);
 
+  readonly useCredit = signal(false);
+
+  readonly availableCredit = computed(() => {return this.profileStore.profile()?.credito ?? 0;});
+
   constructor() {
     this.initialize();
   }
@@ -199,7 +203,8 @@ export class SeatSelection implements OnDestroy {
       seatIds: this.selectedSeats(),
       email,
       birthDate,
-      ageNoticeAccepted: this.ageNoticeAccepted()
+      ageNoticeAccepted: this.ageNoticeAccepted(),
+      useCredit: this.useCredit()
     });
 
     this.purchasing.set(false);
@@ -212,6 +217,10 @@ export class SeatSelection implements OnDestroy {
     }
 
     this.selectedSeats.set([]);
+    this.useCredit.set(false);
+
+    await this.profileStore.loadProfile();
+
 
     await this.router.navigate(['/purchase', data.purchase_id],
       {

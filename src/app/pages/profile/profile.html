@@ -1,62 +1,289 @@
-<section class="profile">
+<section class="profile-page">
 
-  @if (profileStore.profile(); as user) {
+  @if (profileStore.loading()) {
 
-    <h1>Mi perfil</h1>
-
-    <p>
-      <strong>Nombre:</strong>
-      {{ user.nombre }}
+    <p class="status-message">
+      Cargando perfil...
     </p>
 
-    <p>
-      <strong>Apellido:</strong>
-      {{ user.apellido }}
-    </p>
+  } @else if (profileStore.profile(); as profile) {
 
-    <p>
-      <strong>Email:</strong>
-      {{ email() }}
-    </p>
-    
-    <p>
-      <strong>Fecha de nacimiento:</strong>
-      {{ user.nacimiento }}
-    </p>
+    <div class="profile-container">
 
-    <p>
-      <strong>Tipo de sangre:</strong>
-      {{ user.tipo_de_sangre }}
-    </p>
+      <!-- DATOS PERSONALES -->
 
-    <p>
-      <strong>Color de ojos:</strong>
-      {{ user.color_de_ojos }}
-    </p>
+      <div class="profile-card">
 
-    <p>
-      <strong>Días de vacaciones:</strong>
-      {{ user.vacaciones }}
-    </p>
+        <h1>Mi perfil</h1>
 
-    <p>
-      <strong>Rol:</strong>
-      {{ user.rol }}
-    </p>
+        <div class="profile-data">
 
-    <p>
-      <strong>Puntos:</strong>
-      {{ user.puntos }}
-    </p>
+          <div class="profile-item">
+            <span>Nombre</span>
+            <strong>{{ profile.nombre }}</strong>
+          </div>
 
-    <p>
-      <strong>Crédito:</strong>
-      {{ user.credito }}
-    </p>
+          <div class="profile-item">
+            <span>Apellido</span>
+            <strong>{{ profile.apellido }}</strong>
+          </div>
+
+          <div class="profile-item">
+            <span>Email</span>
+            <strong>{{ email() }}</strong>
+          </div>
+
+          <div class="profile-item">
+            <span>Fecha de nacimiento</span>
+            <strong>{{ profile.nacimiento | date:'dd/MM/yyyy' }}</strong>
+          </div>
+
+          <div class="profile-item">
+            <span>Tipo de sangre</span>
+            <strong>{{ profile.tipo_de_sangre || 'No informado' }}</strong>
+          </div>
+
+          <div class="profile-item">
+            <span>Color de ojos</span>
+            <strong>{{ profile.color_de_ojos || 'No informado' }}</strong>
+          </div>
+
+          <div class="profile-item">
+            <span>Vacaciones</span>
+            <strong>{{ profile.vacaciones ?? 0 }}</strong>
+          </div>
+
+          <div class="profile-item">
+            <span>Rol</span>
+            <strong>{{ profile.rol }}</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SALDOS -->
+
+      <div class="balance-grid">
+
+        <div class="balance-card">
+
+          <span>Crédito disponible</span>
+
+          <strong>
+            ${{ profile.credito }}
+          </strong>
+
+          <p>
+            Podés utilizar este saldo en tus próximas compras.
+          </p>
+
+        </div>
+
+
+        <div class="balance-card">
+
+          <span>Puntos disponibles</span>
+
+          <strong>
+            {{ profile.puntos }} puntos
+          </strong>
+
+          <p>
+            Acumulás puntos con tus compras.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- MENSAJES -->
+
+      @if (successMessage()) {
+
+        <div class="message success-message">
+          {{ successMessage() }}
+        </div>
+
+      }
+
+      @if (errorMessage()) {
+
+        <div class="message error-message">
+          {{ errorMessage() }}
+        </div>
+
+      }
+
+
+      <!-- RECOMPENSAS -->
+
+      <section class="rewards-section">
+
+        <div class="section-title">
+
+          <div>
+            <h2>Recompensas</h2>
+
+            <p>
+              Canjeá tus puntos por crédito para utilizar en futuras compras.
+            </p>
+          </div>
+
+        </div>
+
+
+        @if (rewards().length > 0) {
+
+          <div class="rewards-grid">
+
+            @for (reward of rewards(); track reward.id) {
+
+              <article
+                class="reward-card"
+                [class.reward-disabled]="!canRedeem(reward.costo_puntos)"
+              >
+
+                <div class="reward-header">
+
+                  <h3>
+                    {{ reward.nombre }}
+                  </h3>
+
+                  <span class="reward-cost">
+                    {{ reward.costo_puntos }} puntos
+                  </span>
+
+                </div>
+
+                <p class="reward-description">
+                  {{ reward.descripcion }}
+                </p>
+
+                <div class="reward-credit">
+                  + ${{ reward.credito_otorgado }} de crédito
+                </div>
+
+
+                @if (canRedeem(reward.costo_puntos)) {
+
+                  <button
+                    type="button"
+                    class="redeem-button"
+                    [disabled]="redeemingReward() !== null"
+                    (click)="redeemReward(reward)"
+                  >
+
+                    @if (redeemingReward() === reward.id) {
+                      Canjeando...
+                    } @else {
+                      Canjear
+                    }
+
+                  </button>
+
+                } @else {
+
+                  <button
+                    type="button"
+                    class="redeem-button disabled"
+                    disabled
+                  >
+                    Puntos insuficientes
+                  </button>
+
+                }
+
+              </article>
+
+            }
+
+          </div>
+
+        } @else {
+
+          <p class="empty-message">
+            Actualmente no hay recompensas disponibles.
+          </p>
+
+        }
+
+      </section>
+
+
+      <!-- HISTORIAL -->
+
+      <section class="loyalty-section">
+
+        <h2>Historial de puntos</h2>
+
+        @if (loyaltyTransactions().length > 0) {
+
+          <div class="loyalty-list">
+
+            @for (transaction of loyaltyTransactions(); track transaction.id) {
+
+              <div class="loyalty-item">
+
+                <div class="loyalty-info">
+
+                  <strong>
+                    {{ transaction.descripcion }}
+                  </strong>
+
+                  <p>
+                    {{ transaction.created_at | date:'dd/MM/yyyy HH:mm' }}
+                  </p>
+
+                  @if (transaction.purchase_id) {
+
+                    <small>
+                      Compra #{{ transaction.purchase_id }}
+                    </small>
+
+                  }
+
+                </div>
+
+                <span
+                  class="points-value"
+                  [class.positive]="transaction.puntos > 0"
+                  [class.negative]="transaction.puntos < 0"
+                >
+
+                  @if (transaction.puntos > 0) {
+                    +
+                  }
+
+                  {{ transaction.puntos }}
+
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        } @else {
+
+          <p class="empty-message">
+            Todavía no tenés movimientos de puntos.
+          </p>
+
+        }
+
+      </section>
+
+    </div>
 
   } @else {
 
-    <p>Cargando perfil...</p>
+    <p class="status-message">
+      No se pudo cargar el perfil.
+    </p>
 
   }
 

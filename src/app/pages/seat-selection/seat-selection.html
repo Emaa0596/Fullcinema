@@ -63,6 +63,27 @@
 
   </div>
 
+    @if (isLoggedIn() && availableCredit() > 0) {
+    <div class="credit-option">
+
+      <p>
+        Crédito disponible:
+        <strong>${{ availableCredit() }}</strong>
+      </p>
+
+      <label>
+        <input
+          type="checkbox"
+          [checked]="useCredit()"
+          (change)="useCredit.set($any($event.target).checked)"
+        >
+
+        Usar mi crédito en esta compra
+      </label>
+
+    </div>
+  }
+
   <div class="seat-summary">
 
     <h2>Tu selección</h2>

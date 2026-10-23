@@ -83,13 +83,21 @@ export class Admin {
   }
 
   async deleteShowtime(id: number) {
-    const confirmed = confirm('¿Seguro que querés eliminar esta función?');
-    if (!confirmed) { return; }
+    const confirmed = confirm('¿Querés eliminar esta función?');
+    if (!confirmed) return;
     const { error } = await this.showtimeService.deleteShowtime(id);
     if (error) {
       console.error('Error eliminando función:', error);
+      if (error.code === '23503') {
+        this.showtimeError.set('No se puede eliminar la función porque tiene compras asociadas.');
+        return;
+      }
+      this.showtimeError.set('No se pudo eliminar la función.');
       return;
     }
+
+    this.showtimeMessage.set('Función eliminada correctamente.');
+    this.showtimeError.set('');
     await this.loadShowtimes();
   }
 

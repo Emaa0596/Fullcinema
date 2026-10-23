@@ -1,0 +1,133 @@
+<section class="my-purchases">
+
+  <h1>Mis compras</h1>
+
+  @if (loading()) {
+
+    <p>Cargando compras...</p>
+
+  } @else if (errorMessage()) {
+
+    <p class="error-message">
+      {{ errorMessage() }}
+    </p>
+
+  } @else {
+
+    <h2>Próximas funciones</h2>
+
+    <div class="purchase-list">
+
+      @for (purchase of purchases(); track purchase.id) {
+
+        @if (isFuturePurchase(purchase)) {
+
+          <article class="purchase-card">
+
+            <h3>
+              {{ purchase.showtimes?.movies?.nombre }}
+            </h3>
+
+            <p>
+              {{ purchase.showtimes?.fecha | date:'dd/MM/yyyy' }}
+              -
+              {{ purchase.showtimes?.hora?.slice(0, 5) }}
+            </p>
+
+            <p>
+              {{ purchase.showtimes?.rooms?.nombre }}
+            </p>
+
+            <p>
+              Total: ${{ purchase.total }}
+            </p>
+
+            <a [routerLink]="['/purchase', purchase.id]">
+              Ver entrada
+            </a>
+
+          </article>
+
+        }
+
+      }
+
+    </div>
+
+
+    <h2>Historial</h2>
+
+    <div class="purchase-list">
+
+      @for (purchase of purchases(); track purchase.id) {
+
+        @if (isPastPurchase(purchase)) {
+
+          <article class="purchase-card">
+
+            <h3>
+              {{ purchase.showtimes?.movies?.nombre }}
+            </h3>
+
+            <p>
+              {{ purchase.showtimes?.fecha }}
+              -
+              {{ purchase.showtimes?.hora?.slice(0, 5) }}
+            </p>
+
+            <p>
+              Total: ${{ purchase.total }}
+            </p>
+
+            <a [routerLink]="['/purchase', purchase.id]">
+              Ver detalle
+            </a>
+
+          </article>
+
+        }
+
+      }
+
+    </div>
+
+
+    <h2>Canceladas</h2>
+
+    <div class="purchase-list">
+
+      @for (purchase of purchases(); track purchase.id) {
+
+        @if (purchase.status === 'cancelled') {
+
+          <article class="purchase-card cancelled">
+
+            <h3>
+              {{ purchase.showtimes?.movies?.nombre }}
+            </h3>
+
+            <p>
+              {{ purchase.showtimes?.fecha }}
+              -
+              {{ purchase.showtimes?.hora?.slice(0, 5) }}
+            </p>
+
+            <p>
+              Compra cancelada
+            </p>
+
+            <a [routerLink]="['/purchase', purchase.id]">
+              Ver detalle
+            </a>
+
+          </article>
+
+        }
+
+      }
+
+    </div>
+
+  }
+
+</section>
