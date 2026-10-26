@@ -46,4 +46,12 @@ export class MovieService {
       .delete()
       .eq('id', id);
   }
+
+  getMovieById(movieId: number) {
+    return supabase
+      .from('movies')
+      .select('*')
+      .eq('id', movieId)
+      .single();
+  }
 }

@@ -83,6 +83,72 @@
               Ver detalle
             </a>
 
+            @if (canReview(purchase)) {
+
+              <button
+                type="button"
+                class="review-button"
+                (click)="openReview(purchase.id)"
+              >
+                Calificar película
+              </button>
+
+            }
+
+            @if (reviewPurchaseId() === purchase.id) {
+
+              <div class="review-form">
+
+                <h4>Calificar {{ purchase.showtimes?.movies?.nombre }}</h4>
+
+                <div class="stars">
+
+                  @for (star of [1, 2, 3, 4, 5]; track star) {
+
+                    <button
+                      type="button"
+                      class="star"
+                      [class.selected]="star <= rating()"
+                      (click)="rating.set(star)"
+                    >
+                      ★
+                    </button>
+
+                  }
+
+                </div>
+
+                <textarea
+                  rows="4"
+                  placeholder="Comentario opcional"
+                  [value]="comment()"
+                  (input)="comment.set($any($event.target).value)"
+                ></textarea>
+
+                <div class="review-actions">
+
+                  <button
+                    type="button"
+                    class="submit-review"
+                    (click)="submitReview(purchase)"
+                  >
+                    Enviar calificación
+                  </button>
+
+                  <button
+                    type="button"
+                    class="cancel-review"
+                    (click)="closeReview()"
+                  >
+                    Cancelar
+                  </button>
+
+                </div>
+
+              </div>
+
+            }
+
           </article>
 
         }
@@ -90,6 +156,18 @@
       }
 
     </div>
+
+    @if (reviewMessage()) {
+      <p class="review-success">
+        {{ reviewMessage() }}
+      </p>
+    }
+
+    @if (reviewError()) {
+      <p class="review-error">
+        {{ reviewError() }}
+      </p>
+    }
 
 
     <h2>Canceladas</h2>

@@ -139,3 +139,57 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+
+
+.candy-detail {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+}
+
+.candy-detail h2 {
+  margin-bottom: 15px;
+}
+
+.candy-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.candy-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px;
+
+  background: #202026;
+  border-radius: 8px;
+}
+
+.candy-item div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.candy-item span {
+  color: #999;
+  font-size: 13px;
+}
+
+.discount {
+  color: #7edc8b;
+}
+
+.ticket-summary {
+  padding: 12px;
+  background: #202026;
+  border-radius: 8px;
+}
+
+.ticket-summary p {
+  margin: 6px 0;
+}

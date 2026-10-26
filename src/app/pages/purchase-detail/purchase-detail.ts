@@ -74,6 +74,7 @@ export class PurchaseDetail {
     }
 
     this.purchase.set(data);
+    console.log('COMPRA COMPLETA:', data);
   }
 
   async cancelPurchase() {
@@ -110,32 +111,101 @@ export class PurchaseDetail {
     const pdf = new jsPDF();
     pdf.setFontSize(20);
     pdf.text('FullCinema - Entrada', 20, 20);
+
     pdf.setFontSize(12);
-    pdf.text(`Compra #${purchase.id}`, 20, 32);
-    pdf.text(`Película: ${purchase.showtimes?.movies?.nombre}`, 20, 44);
-    pdf.text(`Fecha: ${this.formatDate(purchase.showtimes?.fecha)}`, 20, 54);
-    pdf.text(`Horario: ${purchase.showtimes?.hora?.slice(0, 5)}`, 20, 64);
-    pdf.text(`Sala: ${purchase.showtimes?.rooms?.nombre}`, 20, 74);
-    pdf.text(`Formato: ${purchase.showtimes?.formato}`, 20, 84);
-    pdf.text(`Idioma: ${purchase.showtimes?.idioma}`, 20, 94);
+    let y = 32;
 
-    const seats = purchase.showtime_seats
-      .map((item: any) => `${item.seats?.fila}${item.seats?.numero}`)
-      .join(', ');
+    pdf.text(`Compra #${purchase.id}`, 20, y);
+    y += 12;
 
-    pdf.text(`Butacas: ${seats}`, 20, 104);
-    pdf.text(`Total: $${purchase.total}`, 20, 114);
+    pdf.text(`Película: ${purchase.showtimes?.movies?.nombre}`, 20, y);
+    y += 10;
 
+    pdf.text(`Fecha: ${this.formatDate(purchase.showtimes?.fecha)}`, 20, y);
+    y += 10;
+
+    pdf.text(`Horario: ${purchase.showtimes?.hora?.slice(0, 5)}`, 20, y);
+    y += 10;
+
+    pdf.text(`Sala: ${purchase.showtimes?.rooms?.nombre}`, 20, y);
+    y += 10;
+
+    pdf.text(`Formato: ${purchase.showtimes?.formato}`, 20, y);
+    y += 10;
+
+    pdf.text(`Idioma: ${purchase.showtimes?.idioma}`, 20, y);
+    y += 12;
+
+    // ENTRADAS
+    const ticketQuantity = purchase.showtime_seats?.length ?? 0;
+    const ticketPrice = Number(purchase.showtimes?.precio ?? 0);
+    const ticketsSubtotal = ticketQuantity * ticketPrice;
+
+    pdf.setFontSize(13);
+    pdf.text('Entradas', 20, y);
+    y += 8;
+
+    pdf.setFontSize(11);
+    pdf.text(`${ticketQuantity} x $${ticketPrice} = $${ticketsSubtotal}`, 25, y);
+    y += 8;
+
+    // BUTACAS
+    const seats = purchase.showtime_seats.map((item: any) => `${item.seats?.fila}${item.seats?.numero}`).join(', ');
+    pdf.text(`Butacas: ${seats}`, 25, y);
+    y += 12;
+
+    // CANDY
+    if (purchase.purchase_candy_items?.length > 0) {
+      pdf.setFontSize(13);
+      pdf.text('Candy', 20, y);
+      y += 8;
+
+      pdf.setFontSize(11);
+      purchase.purchase_candy_items.forEach((item: any) => {
+        pdf.text(`${item.cantidad} x ${item.nombre} = $${item.subtotal}`, 25, y);
+        y += 7;
+      });
+
+      y += 5;
+    }
+
+    // TOTALES
+    pdf.setFontSize(12);
+    pdf.text(`Subtotal: $${purchase.subtotal}`, 20, y);
+    y += 8;
+
+    if (purchase.descuento > 0) {
+      pdf.text(`Descuento primera compra: -$${purchase.descuento}`, 20, y);
+      y += 8;
+    }
+
+    if (purchase.descuento_cupon > 0) {
+      pdf.text(`Descuento por cupón: -$${purchase.descuento_cupon}`, 20, y);
+      y += 8;
+    }
+
+    if (purchase.credito_usado > 0) {
+      pdf.text(`Crédito utilizado: -$${purchase.credito_usado}`, 20, y);
+      y += 8;
+    }
+
+    pdf.setFontSize(14);
+    pdf.text(`Total: $${purchase.total}`, 20, y);
+    y += 12;
+
+    // QR
     const qrContainer = document.getElementById('ticket-qr');
     const canvas = qrContainer?.querySelector('canvas');
 
     if (canvas) {
       const qrImage = canvas.toDataURL('image/png');
-      pdf.addImage(qrImage,'PNG',65,125,80,80);
+      pdf.addImage(qrImage, 'PNG', 65, y, 80, 80);
+      y += 90;
     }
 
     pdf.setFontSize(9);
-    pdf.text( `Código: ${purchase.tickets?.code}`,20,215);
+    pdf.text(`Código: ${purchase.tickets?.code}`, 20, y);
+
     pdf.save(`entrada-${purchase.id}.pdf`);
   }
 

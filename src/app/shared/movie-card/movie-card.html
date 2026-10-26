@@ -18,6 +18,28 @@
       {{ movie().sinopsis }}
     </p>
 
+    @if (rating()?.cantidad_reviews > 0) {
+
+      <div class="movie-rating">
+        <span>★</span>
+
+        <strong>
+          {{ rating().promedio }}
+        </strong>
+
+        <small>
+          ({{ rating().cantidad_reviews }})
+        </small>
+      </div>
+
+    } @else {
+
+      <div class="movie-rating no-rating">
+        Sin calificaciones
+      </div>
+
+    }
+
     <a class="showtimes-button" [routerLink]="['/movies', movie().id, 'showtimes']">
       Ver funciones
     </a>

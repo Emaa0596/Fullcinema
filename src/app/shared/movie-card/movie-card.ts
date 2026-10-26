@@ -10,4 +10,5 @@ import { Movie } from '../../models/movie.model';
 })
 export class MovieCard {
   movie = input.required<Movie>();
+  rating = input<any>();
 }

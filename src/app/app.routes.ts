@@ -11,9 +11,11 @@ import { Admin } from './pages/admin/admin';
 import { Employee } from './pages/employee/employee';
 import { employeeGuard } from './guards/employee.guard';
 import { SeatSelection } from './pages/seat-selection/seat-selection';
-import { MovieShowtimes } from './pages/movie-showtimes/movie-showtimes';
+import { Showtimes } from './pages/showtimes/showtimes';
 import { PurchaseDetail } from './pages/purchase-detail/purchase-detail';
 import { MyPurchases } from './pages/my-purchases/my-purchases';
+import { Candy } from './pages/candy/candy';
+import { AdminCandy } from './pages/admin-candy/admin-candy';
 
 export const routes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -26,8 +28,10 @@ export const routes: Routes = [
     {path: 'admin', component: Admin, canActivate: [adminGuard]},
     {path: 'employee', component: Employee, canActivate: [employeeGuard]},
     {path: 'showtime/:id/seats',component: SeatSelection},
-    {path: 'movies/:id/showtimes',  component: MovieShowtimes},
+    {path: 'movies/:id/showtimes',  component: Showtimes},
     {path: 'purchase/:id', component: PurchaseDetail},
-    {path: 'my-purchases', component: MyPurchases, canActivate: [authGuard]}
+    {path: 'my-purchases', component: MyPurchases, canActivate: [authGuard]},
+    {path: 'candy', component: Candy},
+    { path: 'admin/candy', component: AdminCandy, canActivate: [adminGuard]}
 ];
     

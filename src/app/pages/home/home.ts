@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Movie } from '../../models/movie.model';
 import { MovieCard } from '../../shared/movie-card/movie-card';
 import { MovieService } from '../../services/movie.service';
+import { ReviewService } from '../../services/review.service';
 
 @Component({
   imports: [MovieCard],
@@ -11,8 +12,18 @@ import { MovieService } from '../../services/movie.service';
 })
 export class Home {
 
+  movies = signal<Movie[]>([]);
+  search = signal('');
+  selectedgenre = signal('');
+  private readonly movieService = inject(MovieService);
+  private readonly reviewService = inject(ReviewService);
+  readonly movieRatings = signal<any[]>([]);
+  readonly topMovies = signal<any[]>([]);
+
   constructor() {
     this.loadMovies();
+    this.loadRatings();
+    this.loadTopMovies();
   }
 
   private async loadMovies() {
@@ -35,10 +46,17 @@ export class Home {
 
     this.movies.set(movies);
   }
-  movies = signal<Movie[]>([]);
-  search = signal('');
-  selectedgenre = signal('');
-  private readonly movieService = inject(MovieService);
+
+  private async loadTopMovies() {
+    const { data, error } = await this.reviewService.getTopMovies();
+
+    if (error) {
+      console.error('Error cargando Top 3:', error);
+      return;
+    }
+
+    this.topMovies.set(data ?? []);
+  }
 
   onGenreChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
@@ -63,4 +81,18 @@ export class Home {
   });
 
   genresSet = computed(() => [...new Set(this.movies().flatMap(movie => movie.generos))]);
+
+  private async loadRatings() {
+    const { data, error } = await this.reviewService.getMovieRatings();
+    if (error) {
+      console.error('Error cargando ratings:', error);
+      return;
+    }
+    this.movieRatings.set(data ?? []);
+  }
+
+  getRating(movieId: number) {
+    return this.movieRatings().find(rating => rating.movie_id === movieId);
+  }
+
 }

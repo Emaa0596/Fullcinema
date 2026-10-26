@@ -1,0 +1,440 @@
+<section class="candy-page">
+
+  <div class="candy-container">
+
+    <div class="candy-header">
+      <h1>Candy</h1>
+
+      <p>
+        Sumá bebidas, pochoclos y combos para disfrutar durante la película.
+      </p>
+    </div>
+
+
+    @if (loading()) {
+
+      <p class="status-message">
+        Cargando productos...
+      </p>
+
+    } @else if (errorMessage()) {
+
+      <p class="error-message">
+        {{ errorMessage() }}
+      </p>
+
+    } @else {
+
+      <!-- COMBOS -->
+
+      @if (combos().length > 0) {
+
+        <section class="combos-section">
+
+          <div class="section-heading">
+            <h2>Combos</h2>
+
+            <p>
+              Elegí entre nuestras opciones combinadas.
+            </p>
+          </div>
+
+
+          <div class="combos-grid">
+
+            @for (combo of combos(); track combo.id) {
+
+              <article class="combo-card">
+
+                @if (combo.imagen) {
+
+                  <img
+                    class="product-image"
+                    [src]="combo.imagen"
+                    [alt]="combo.nombre"
+                  >
+
+                } @else {
+
+                  <div class="product-placeholder">
+                    Combo
+                  </div>
+
+                }
+
+
+                <div class="product-content">
+
+                  <h3>
+                    {{ combo.nombre }}
+                  </h3>
+
+                  @if (combo.descripcion) {
+
+                    <p class="description">
+                      {{ combo.descripcion }}
+                    </p>
+
+                  }
+
+
+                  @if (combo.combo_products?.length > 0) {
+
+                    <ul class="combo-products">
+
+                      @for (item of combo.combo_products; track item.products?.id) {
+
+                        <li>
+                          {{ item.cantidad }} ×
+                          {{ item.products?.nombre }}
+                        </li>
+
+                      }
+
+                    </ul>
+
+                  }
+
+
+                  <div class="product-footer">
+
+                    <strong class="price">
+                      ${{ combo.precio }}
+                    </strong>
+
+                    <button
+                      type="button"
+                      class="add-button"
+                      (click)="addCombo(combo)"
+                    >
+                      Agregar
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </article>
+
+            }
+
+          </div>
+
+        </section>
+
+      }
+
+
+      <!-- PRODUCTOS -->
+
+      <section class="products-section">
+
+        <div class="section-heading">
+
+          <h2>Productos</h2>
+
+          <p>
+            También podés elegir productos individualmente.
+          </p>
+
+        </div>
+
+
+        <!-- CATEGORÍAS -->
+
+        <div class="categories">
+
+          <button
+            type="button"
+            [class.active]="selectedCategory() === null"
+            (click)="selectCategory(null)"
+          >
+            Todos
+          </button>
+
+
+          @for (category of categories(); track category.id) {
+
+            <button
+              type="button"
+              [class.active]="selectedCategory() === category.id"
+              (click)="selectCategory(category.id)"
+            >
+              {{ category.nombre }}
+            </button>
+
+          }
+
+        </div>
+
+
+        <!-- LISTADO DE PRODUCTOS -->
+
+        @if (filteredProducts().length > 0) {
+
+          <div class="products-grid">
+
+            @for (product of filteredProducts(); track product.id) {
+
+              <article class="product-card">
+
+                @if (product.imagen) {
+
+                  <img
+                    class="product-image"
+                    [src]="product.imagen"
+                    [alt]="product.nombre"
+                  >
+
+                } @else {
+
+                  <div class="product-placeholder">
+                    Producto
+                  </div>
+
+                }
+
+
+                <div class="product-content">
+
+                  <h3>
+                    {{ product.nombre }}
+                  </h3>
+
+                  @if (product.descripcion) {
+
+                    <p class="description">
+                      {{ product.descripcion }}
+                    </p>
+
+                  }
+
+
+                  <div class="stock">
+
+                    @if (product.stock > 0) {
+                      Disponible
+                    } @else {
+                      Sin stock
+                    }
+
+                  </div>
+
+
+                  <div class="product-footer">
+
+                    <strong class="price">
+                      ${{ product.precio }}
+                    </strong>
+
+                    <button
+                      type="button"
+                      class="add-button"
+                      [disabled]="product.stock <= 0"
+                      (click)="addProduct(product)"
+                    >
+                      @if (product.stock > 0) {
+                        Agregar
+                      } @else {
+                        Sin stock
+                      }
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </article>
+
+            }
+
+          </div>
+
+        } @else {
+
+          <p class="empty-message">
+            No hay productos disponibles en esta categoría.
+          </p>
+
+        }
+
+      </section>
+
+
+      <!-- CARRITO -->
+
+      @if (candyService.cart().length > 0) {
+
+        <section class="cart-section">
+
+          <div class="section-heading">
+
+            <h2>Tu pedido</h2>
+
+            <p>
+              Revisá los productos que agregaste.
+            </p>
+
+          </div>
+
+
+          <div class="cart-card">
+
+            @for (item of candyService.cart(); track item.type + '-' + item.id) {
+
+              <div class="cart-item">
+
+                <div class="cart-info">
+
+                  <strong>
+                    {{ item.nombre }}
+                  </strong>
+
+                  <span>
+                    ${{ item.precio }} c/u
+                  </span>
+
+                </div>
+
+
+                <div class="cart-controls">
+
+                  <button
+                    type="button"
+                    (click)="candyService.decrease(item)"
+                  >
+                    −
+                  </button>
+
+                  <strong>
+                    {{ item.cantidad }}
+                  </strong>
+
+                  <button
+                    type="button"
+                    (click)="candyService.increase(item)"
+                  >
+                    +
+                  </button>
+
+                </div>
+
+
+                <strong class="cart-subtotal">
+                  ${{ item.precio * item.cantidad }}
+                </strong>
+
+
+                <button
+                  type="button"
+                  class="remove-button"
+                  (click)="candyService.remove(item)"
+                >
+                  ×
+                </button>
+
+              </div>
+
+            }
+
+
+            <div class="cart-footer">
+
+              <div>
+
+                <span>
+                  {{ candyService.cartQuantity() }}
+
+                  @if (candyService.cartQuantity() === 1) {
+                    producto
+                  } @else {
+                    productos
+                  }
+                </span>
+
+                <strong>
+                  Total Candy: ${{ candyService.cartTotal() }}
+                </strong>
+
+              </div>
+
+
+              <button
+                type="button"
+                class="clear-button"
+                (click)="candyService.clearCart()"
+              >
+                Vaciar
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      }
+
+    }
+
+    <section class="coupon-section">
+
+        <h2>Cupón de descuento</h2>
+
+        <div class="coupon-form">
+
+            <input
+            type="text"
+            placeholder="Ingresá tu código"
+            [value]="couponCode()"
+            (input)="couponCode.set($any($event.target).value)"
+            >
+
+            <button
+            type="button"
+            (click)="applyCoupon()"
+            >
+            Aplicar
+            </button>
+
+        </div>
+
+
+        @if (couponMessage()) {
+
+            <p class="coupon-success">
+            {{ couponMessage() }}
+            </p>
+
+        }
+
+
+        @if (couponError()) {
+
+            <p class="coupon-error">
+            {{ couponError() }}
+            </p>
+
+        }
+
+        </section>
+
+    <section class="checkout-actions">
+
+    <button
+        type="button"
+        class="confirm-purchase-button"
+        (click)="confirmPurchase()"
+    >
+        Confirmar compra
+    </button>
+
+    <p>
+        Podés continuar aunque no agregues productos de Candy.
+    </p>
+
+    </section>
+
+  </div>
+
+</section>

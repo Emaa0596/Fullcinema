@@ -2,161 +2,213 @@
 
   @if (loading()) {
 
-    <p>Cargando compra...</p>
+  <p>Cargando compra...</p>
 
   } @else if (errorMessage()) {
 
-    <p class="error-message">
-      {{ errorMessage() }}
-    </p>
+  <p class="error-message">
+    {{ errorMessage() }}
+  </p>
 
   } @else if (purchase(); as purchase) {
 
-    <div class="purchase-card">
+  <div class="purchase-card">
 
-      <h1>Compra realizada</h1>
+    <h1>Compra realizada</h1>
 
-      <p class="purchase-number">
-        Compra #{{ purchase.id }}
+    <p class="purchase-number">
+      Compra #{{ purchase.id }}
+    </p>
+
+    <hr>
+
+    <h2>
+      {{ purchase.showtimes?.movies?.nombre }}
+    </h2>
+
+    <div class="purchase-info">
+
+      <p>
+        <strong>Fecha:</strong>
+        {{ purchase.showtimes?.fecha | date:'dd/MM/yyyy' }}
       </p>
 
-      <hr>
+      <p>
+        <strong>Horario:</strong>
+        {{ purchase.showtimes?.hora?.slice(0, 5) }}
+      </p>
 
-      <h2>
-        {{ purchase.showtimes?.movies?.nombre }}
-      </h2>
+      <p>
+        {{ purchase.showtimes?.rooms?.nombre }}
+      </p>
 
-      <div class="purchase-info">
+      <p>
+        <strong>Formato:</strong>
+        {{ purchase.showtimes?.formato }}
+      </p>
 
-        <p>
-          <strong>Fecha:</strong>
-          {{ purchase.showtimes?.fecha | date:'dd/MM/yyyy' }}
-        </p>
+      <p>
+        <strong>Idioma:</strong>
+        {{ purchase.showtimes?.idioma }}
+      </p>
 
-        <p>
-          <strong>Horario:</strong>
-          {{ purchase.showtimes?.hora?.slice(0, 5) }}
-        </p>
+    </div>
 
-        <p>
-          {{ purchase.showtimes?.rooms?.nombre }}
-        </p>
+    <hr>
 
-        <p>
-          <strong>Formato:</strong>
-          {{ purchase.showtimes?.formato }}
-        </p>
+    <h3>Butacas</h3>
 
-        <p>
-          <strong>Idioma:</strong>
-          {{ purchase.showtimes?.idioma }}
-        </p>
+    <div class="seat-list">
 
-      </div>
+      @for (item of purchase.showtime_seats; track item.seat_id) {
 
-      <hr>
-
-      <h3>Butacas</h3>
-
-      <div class="seat-list">
-
-        @for (item of purchase.showtime_seats; track item.seat_id) {
-
-          <span class="seat-ticket">
-            {{ item.seats?.fila }}
-            {{ item.seats?.numero }}
-          </span>
-
-        }
-
-      </div>
-
-      <hr>
-
-      <div class="purchase-totals">
-
-        <p>
-          Subtotal:
-          ${{ purchase.subtotal }}
-        </p>
-
-        @if (purchase.descuento > 0) {
-          <p>
-            Descuento:
-            ${{ purchase.descuento }}
-          </p>
-        }
-
-        <p class="total">
-          Total:
-          ${{ purchase.total }}
-        </p>
-
-      </div>
-
-      @if (purchase.tickets; as ticket) {
-
-        <div class="ticket-section">
-
-          <h3>Tu entrada</h3>
-
-          <div id="ticket-qr">
-            <qrcode
-              [qrdata]="ticket.code"
-              [width]="220"
-              [errorCorrectionLevel]="'M'"
-            ></qrcode>
-          </div>
-
-          <p>
-            <strong>Código:</strong>
-            {{ ticket.code }}
-          </p>
-
-        </div>
+      <span class="seat-ticket">
+        {{ item.seats?.fila }}
+        {{ item.seats?.numero }}
+      </span>
 
       }
 
-      <p class="status">
-        Estado: {{ purchase.status }}
+    </div>
+
+    <hr>
+
+    <h3>Entradas</h3>
+
+    <div class="ticket-summary">
+      <p>
+        Cantidad:
+        {{ purchase.showtime_seats?.length }}
       </p>
 
-      <button
-        type="button"
-        class="pdf-button"
-        (click)="generatePdf()"
-      >
-        Descargar entrada PDF
-      </button>
+      <p>
+        Precio por entrada:
+        ${{ purchase.showtimes?.precio }}
+      </p>
 
-      @if (purchase.status === 'confirmed') {
-    <button
-    type="button"
-    class="cancel-button"
-    (click)="cancelPurchase()"
-    [disabled]="cancelling()"
-    >
-    @if (cancelling()) {
-          Cancelando...
-        } @else {
-          Cancelar compra
-        }
-      </button>
+    </div>
+
+    <hr>
+
+    @if (purchase.purchase_candy_items?.length > 0) {
+
+      <section class="candy-detail">
+
+        <h2>Candy</h2>
+
+        <div class="candy-items">
+
+          @for (item of purchase.purchase_candy_items; track item.id) {
+
+            <div class="candy-item">
+
+              <div>
+                <strong>{{ item.nombre }}</strong>
+
+                <span>
+                  {{ item.cantidad }} × ${{ item.precio_unitario }}
+                </span>
+              </div>
+
+              <strong>
+                ${{ item.subtotal }}
+              </strong>
+
+            </div>
+
+          }
+
+        </div>
+
+      </section>
+
+    }
+
+    <div class="purchase-totals">
+
+      <p>
+        Subtotal:
+        ${{ purchase.subtotal }}
+      </p>
+
+      @if (purchase.descuento > 0) {
+        <p class="discount">
+          Descuento primera compra:
+          -${{ purchase.descuento }}
+        </p>
+      }
+
+      @if (purchase.descuento_cupon > 0) {
+        <p class="discount">
+          Descuento por cupón:
+          -${{ purchase.descuento_cupon }}
+        </p>
+      }
+
+      @if (purchase.credito_usado > 0) {
+        <p class="discount">
+          Crédito utilizado:
+          -${{ purchase.credito_usado }}
+        </p>
+      }
+
+      <p class="total">
+        Total:
+        ${{ purchase.total }}
+      </p>
+
+    </div>
+
+    @if (purchase.tickets; as ticket) {
+
+    <div class="ticket-section">
+
+      <h3>Tu entrada</h3>
+
+      <div id="ticket-qr">
+        <qrcode [qrdata]="ticket.code" [width]="220" [errorCorrectionLevel]="'M'"></qrcode>
+      </div>
+
+      <p>
+        <strong>Código:</strong>
+        {{ ticket.code }}
+      </p>
+
+    </div>
+
+    }
+
+    <p class="status">
+      Estado: {{ purchase.status }}
+    </p>
+
+    <button type="button" class="pdf-button" (click)="generatePdf()">
+      Descargar entrada PDF
+    </button>
+
+    @if (purchase.status === 'confirmed') {
+    <button type="button" class="cancel-button" (click)="cancelPurchase()" [disabled]="cancelling()">
+      @if (cancelling()) {
+      Cancelando...
+      } @else {
+      Cancelar compra
+      }
+    </button>
     }
 
     @if (cancelMessage()) {
-      <p class="success-message">
-        {{ cancelMessage() }}
-      </p>
+    <p class="success-message">
+      {{ cancelMessage() }}
+    </p>
     }
 
     @if (cancelError()) {
-      <p class="error-message">
-        {{ cancelError() }}
-      </p>
+    <p class="error-message">
+      {{ cancelError() }}
+    </p>
     }
 
-    </div>
+  </div>
 
   }
 

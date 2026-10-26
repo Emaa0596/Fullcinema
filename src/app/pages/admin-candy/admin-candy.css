@@ -1,0 +1,158 @@
+.admin-candy {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #0d0d0f;
+  color: white;
+}
+
+.admin-header,
+.admin-section {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0 30px;
+}
+
+.admin-tabs button {
+  padding: 9px 15px;
+  background: #1c1c21;
+  color: #aaa;
+  border: 1px solid #37373f;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.admin-tabs button.active {
+  background: #e5b34c;
+  color: #111;
+  border-color: #e5b34c;
+}
+
+.admin-form {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  background: #18181d;
+  border: 1px solid #303038;
+  border-radius: 12px;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  padding: 10px 12px;
+  background: #101014;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 7px;
+}
+
+.form-actions,
+.item-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.form-actions button,
+.item-actions button {
+  padding: 8px 13px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.form-actions button {
+  background: #e5b34c;
+  color: #111;
+  font-weight: 700;
+}
+
+.secondary {
+  background: #444 !important;
+  color: white !important;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.admin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  background: #18181d;
+  border: 1px solid #303038;
+  border-radius: 9px;
+}
+
+.admin-item > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-item span {
+  color: #999;
+  font-size: 13px;
+}
+
+.item-actions button {
+  background: #333;
+  color: white;
+}
+
+.item-actions .danger {
+  color: #ff7373;
+}
+
+.success-message {
+  color: #7edc8b;
+  text-align: center;
+}
+
+.error-message {
+  color: #ff7373;
+  text-align: center;
+}
+
+.admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-form label span {
+  color: #aaa;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-item.inactive {
+  opacity: 0.6;
+}
+
+.product-status {
+  width: fit-content;
+  margin-top: 3px;
+  color: #ff7373;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.product-status.active {
+  color: #7edc8b;
+}
+
+.item-actions .activate {
+  color: #7edc8b;
+}

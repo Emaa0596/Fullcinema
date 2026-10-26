@@ -17,6 +17,16 @@
     <a routerLink="/coming-soon" routerLinkActive="active">
       Próximamente
     </a>
+
+  @if (isAdmin()) {
+    <a routerLink="/admin/candy">
+      Candy
+    </a>
+  } @else {
+    <a routerLink="/candy">
+      Candy
+    </a>
+  }
   </nav>
 
   <div class="auth-actions">

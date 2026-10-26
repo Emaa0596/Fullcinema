@@ -1,0 +1,526 @@
+<section class="admin-candy">
+
+  <div class="admin-header">
+    <h1>Administración Candy</h1>
+
+    <div class="admin-tabs">
+      <button type="button" [class.active]="section() === 'products'" (click)="section.set('products')">
+        Productos
+      </button>
+
+      <button type="button" [class.active]="section() === 'categories'" (click)="section.set('categories')">
+        Categorías
+      </button>
+
+      <button type="button" [class.active]="section() === 'combos'" (click)="section.set('combos')">
+        Combos
+      </button>
+
+      <button type="button" [class.active]="section() === 'coupons'" (click)="section.set('coupons')">
+        Cupones
+      </button>
+    </div>
+  </div>
+
+
+  @if (errorMessage()) {
+    <p class="error-message">{{ errorMessage() }}</p>
+  }
+
+  @if (successMessage()) {
+    <p class="success-message">{{ successMessage() }}</p>
+  }
+
+
+  <!-- ==================== PRODUCTOS ==================== -->
+
+  @if (section() === 'products') {
+
+    <section class="admin-section">
+
+      <h2>Productos</h2>
+
+      <div class="admin-form">
+
+        <label>
+          <span>Nombre</span>
+          <input type="text" placeholder="Nombre del producto" [(ngModel)]="productForm.nombre">
+        </label>
+
+        <label>
+          <span>Descripción</span>
+          <textarea placeholder="Descripción del producto" [(ngModel)]="productForm.descripcion"></textarea>
+        </label>
+
+        <label>
+          <span>Categoría</span>
+
+          <select [(ngModel)]="productForm.category_id">
+            <option [ngValue]="null">Seleccionar categoría</option>
+
+            @for (category of categories(); track category.id) {
+              @if (category.activo) {
+                <option [ngValue]="category.id">{{ category.nombre }}</option>
+              }
+            }
+          </select>
+        </label>
+
+        <label>
+          <span>Precio</span>
+          <input type="number" min="0" [(ngModel)]="productForm.precio">
+        </label>
+
+        <label>
+          <span>Stock</span>
+          <input type="number" min="0" [(ngModel)]="productForm.stock">
+        </label>
+
+        <label>
+          <span>Imagen</span>
+          <input type="text" placeholder="/images/candy/producto.jpg" [(ngModel)]="productForm.imagen">
+        </label>
+
+        <div class="form-actions">
+          <button type="button" (click)="saveProduct()">
+            @if (productForm.id) {
+              Guardar cambios
+            } @else {
+              Crear producto
+            }
+          </button>
+
+          @if (productForm.id) {
+            <button type="button" class="secondary" (click)="resetProductForm()">
+              Cancelar edición
+            </button>
+          }
+        </div>
+
+      </div>
+
+
+      <div class="admin-list">
+
+        @for (product of products(); track product.id) {
+
+          <article class="admin-item" [class.inactive]="!product.activo">
+
+            <div>
+              <strong>{{ product.nombre }}</strong>
+
+              <span>
+                ${{ product.precio }} · Stock {{ product.stock }}
+              </span>
+
+              <span class="product-status" [class.active]="product.activo">
+                @if (product.activo) {
+                  Activo
+                } @else {
+                  Inactivo
+                }
+              </span>
+            </div>
+
+            <div class="item-actions">
+
+              <button type="button" (click)="editProduct(product)">
+                Editar
+              </button>
+
+              <button
+                type="button"
+                [class.danger]="product.activo"
+                [class.activate]="!product.activo"
+                (click)="toggleProduct(product)"
+              >
+                @if (product.activo) {
+                  Desactivar
+                } @else {
+                  Activar
+                }
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    </section>
+
+  }
+
+
+  <!-- ==================== CATEGORÍAS ==================== -->
+
+  @if (section() === 'categories') {
+
+    <section class="admin-section">
+
+      <h2>Categorías</h2>
+
+      <div class="admin-form">
+
+        <label>
+          <span>Nombre</span>
+          <input type="text" placeholder="Ej: Bebidas" [(ngModel)]="categoryForm.nombre">
+        </label>
+
+        <div class="form-actions">
+
+          <button type="button" (click)="saveCategory()">
+            @if (categoryForm.id) {
+              Guardar cambios
+            } @else {
+              Crear categoría
+            }
+          </button>
+
+          @if (categoryForm.id) {
+            <button type="button" class="secondary" (click)="resetCategoryForm()">
+              Cancelar edición
+            </button>
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="admin-list">
+
+        @for (category of categories(); track category.id) {
+
+          <article class="admin-item" [class.inactive]="!category.activo">
+
+            <div>
+              <strong>{{ category.nombre }}</strong>
+
+              <span class="product-status" [class.active]="category.activo">
+                @if (category.activo) {
+                  Activa
+                } @else {
+                  Inactiva
+                }
+              </span>
+            </div>
+
+            <div class="item-actions">
+
+              <button type="button" (click)="editCategory(category)">
+                Editar
+              </button>
+
+              <button
+                type="button"
+                [class.danger]="category.activo"
+                [class.activate]="!category.activo"
+                (click)="toggleCategory(category)"
+              >
+                @if (category.activo) {
+                  Desactivar
+                } @else {
+                  Activar
+                }
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    </section>
+
+  }
+
+
+  <!-- ==================== COMBOS ==================== -->
+
+  @if (section() === 'combos') {
+
+    <section class="admin-section">
+
+      <h2>Combos</h2>
+
+      <div class="admin-form">
+
+        <label>
+          <span>Nombre</span>
+          <input type="text" placeholder="Nombre del combo" [(ngModel)]="comboForm.nombre">
+        </label>
+
+        <label>
+          <span>Descripción</span>
+          <textarea placeholder="Descripción del combo" [(ngModel)]="comboForm.descripcion"></textarea>
+        </label>
+
+        <label>
+          <span>Precio final del combo</span>
+          <input type="number" min="0" [(ngModel)]="comboForm.precio">
+        </label>
+
+        <label>
+          <span>Imagen</span>
+          <input type="text" placeholder="/images/candy/combo.jpg" [(ngModel)]="comboForm.imagen">
+        </label>
+
+
+        <h3>Productos incluidos</h3>
+
+        <div class="combo-product-list">
+
+          @for (product of products(); track product.id) {
+
+            @if (product.activo) {
+
+              <div class="combo-product-item">
+
+                <div>
+                  <strong>{{ product.nombre  }} </strong>
+                </div>
+
+                <label>
+                  <span>Cantidad</span>
+
+                  <input
+                    type="number"
+                    min="0"
+                    [value]="getComboProductQuantity(product.id)"
+                    (input)="setComboProductQuantity(product.id, +$any($event.target).value)"
+                  >
+                </label>
+
+              </div>
+
+            }
+
+          }
+
+        </div>
+
+
+        <div class="form-actions">
+
+          <button type="button" (click)="saveCombo()">
+            @if (comboForm.id) {
+              Guardar cambios
+            } @else {
+              Crear combo
+            }
+          </button>
+
+          @if (comboForm.id) {
+            <button type="button" class="secondary" (click)="resetComboForm()">
+              Cancelar edición
+            </button>
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="admin-list">
+
+        @for (combo of combos(); track combo.id) {
+
+          <article class="admin-item" [class.inactive]="!combo.activo">
+
+            <div>
+
+              <strong>{{ combo.nombre }}</strong>
+
+              <span>
+                ${{ combo.precio }}
+              </span>
+
+              @if (combo.descripcion) {
+                <span>{{ combo.descripcion }}</span>
+              }
+
+              @if (combo.combo_products?.length > 0) {
+
+                <div class="combo-products-summary">
+
+                  @for (item of combo.combo_products; track item.products?.id) {
+                    <span>
+                      {{ item.cantidad }} × {{ item.products?.nombre }}
+                    </span>
+                  }
+
+                </div>
+
+              }
+
+              <span class="product-status" [class.active]="combo.activo">
+                @if (combo.activo) {
+                  Activo
+                } @else {
+                  Inactivo
+                }
+              </span>
+
+            </div>
+
+
+            <div class="item-actions">
+
+              <button type="button" (click)="editCombo(combo)">
+                Editar
+              </button>
+
+              <button
+                type="button"
+                [class.danger]="combo.activo"
+                [class.activate]="!combo.activo"
+                (click)="toggleCombo(combo)"
+              >
+                @if (combo.activo) {
+                  Desactivar
+                } @else {
+                  Activar
+                }
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    </section>
+
+  }
+
+
+  <!-- ==================== CUPONES ==================== -->
+
+  @if (section() === 'coupons') {
+
+    <section class="admin-section">
+
+      <h2>Cupones</h2>
+
+      <div class="admin-form">
+
+        <label>
+          <span>Código</span>
+          <input type="text" placeholder="Ej: CINE10" [(ngModel)]="couponForm.codigo">
+        </label>
+
+        <label>
+          <span>Descripción</span>
+          <textarea placeholder="Descripción del cupón" [(ngModel)]="couponForm.descripcion"></textarea>
+        </label>
+
+        <label>
+          <span>Porcentaje de descuento</span>
+          <input type="number" min="1" max="100" [(ngModel)]="couponForm.porcentaje">
+        </label>
+
+        <label>
+          <span>Válido desde</span>
+          <input type="date" [(ngModel)]="couponForm.fecha_desde">
+        </label>
+
+        <label>
+          <span>Válido hasta</span>
+          <input type="date" [(ngModel)]="couponForm.fecha_hasta">
+        </label>
+
+        <div class="form-actions">
+
+          <button type="button" (click)="saveCoupon()">
+            @if (couponForm.id) {
+              Guardar cambios
+            } @else {
+              Crear cupón
+            }
+          </button>
+
+          @if (couponForm.id) {
+            <button type="button" class="secondary" (click)="resetCouponForm()">
+              Cancelar edición
+            </button>
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="admin-list">
+
+        @for (coupon of coupons(); track coupon.id) {
+
+          <article class="admin-item" [class.inactive]="!coupon.activo">
+
+            <div>
+
+              <strong>{{ coupon.codigo }}</strong>
+
+              <span>
+                {{ coupon.porcentaje }}% de descuento
+              </span>
+
+              @if (coupon.descripcion) {
+                <span>{{ coupon.descripcion }}</span>
+              }
+
+              <span>
+                Desde: {{ coupon.fecha_desde || 'Sin fecha' }}
+                ·
+                Hasta: {{ coupon.fecha_hasta || 'Sin fecha' }}
+              </span>
+
+              <span class="product-status" [class.active]="coupon.activo">
+                @if (coupon.activo) {
+                  Activo
+                } @else {
+                  Inactivo
+                }
+              </span>
+
+            </div>
+
+
+            <div class="item-actions">
+
+              <button type="button" (click)="editCoupon(coupon)">
+                Editar
+              </button>
+
+              <button
+                type="button"
+                [class.danger]="coupon.activo"
+                [class.activate]="!coupon.activo"
+                (click)="toggleCoupon(coupon)"
+              >
+                @if (coupon.activo) {
+                  Desactivar
+                } @else {
+                  Activar
+                }
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    </section>
+
+  }
+
+</section>

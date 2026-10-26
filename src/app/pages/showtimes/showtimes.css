@@ -1,0 +1,402 @@
+.showtimes-page {
+  min-height: 100vh;
+  padding: 45px 20px 70px;
+  background: #0d0d0f;
+  color: white;
+}
+
+.movie-detail {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+
+/* HERO */
+
+.movie-hero {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 40px;
+  align-items: start;
+
+  padding: 30px;
+
+  background: #18181d;
+  border: 1px solid #2d2d33;
+  border-radius: 16px;
+}
+
+.poster-container {
+  width: 100%;
+}
+
+.movie-poster {
+  display: block;
+
+  width: 100%;
+  aspect-ratio: 10 / 14;
+
+  object-fit: cover;
+
+  border-radius: 12px;
+}
+
+.movie-info h1 {
+  margin: 0 0 14px;
+
+  font-size: 2.4rem;
+  line-height: 1.1;
+}
+
+
+/* RATING */
+
+.movie-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-bottom: 18px;
+}
+
+.rating-star {
+  color: #e5b34c;
+  font-size: 24px;
+}
+
+.movie-rating strong {
+  color: #e5b34c;
+  font-size: 20px;
+}
+
+.movie-rating small {
+  margin-left: 5px;
+  color: #8e8e98;
+}
+
+.no-rating {
+  margin: 0 0 18px;
+
+  color: #8e8e98;
+  font-size: 14px;
+}
+
+
+/* DATOS DE PELÍCULA */
+
+.movie-meta {
+  display: flex;
+  gap: 10px;
+
+  margin-bottom: 15px;
+}
+
+.movie-meta span {
+  padding: 6px 10px;
+
+  background: #28282f;
+
+  border-radius: 6px;
+
+  color: #d4d4d8;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-bottom: 22px;
+}
+
+.genre {
+  padding: 6px 11px;
+
+  border: 1px solid #44444c;
+  border-radius: 20px;
+
+  color: #bbb;
+  font-size: 13px;
+}
+
+.synopsis {
+  max-width: 720px;
+
+  margin: 0;
+
+  color: #b5b5bd;
+
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+
+/* SECCIONES */
+
+.showtimes-section,
+.reviews-section {
+  margin-top: 45px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  margin: 0;
+
+  font-size: 1.7rem;
+}
+
+.section-heading p {
+  margin: 6px 0 0;
+
+  color: #888891;
+  font-size: 14px;
+}
+
+
+/* FUNCIONES */
+
+.showtimes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.showtime-card {
+  padding: 20px;
+
+  background: #18181d;
+
+  border: 1px solid #303038;
+  border-radius: 12px;
+
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.showtime-card:hover {
+  transform: translateY(-2px);
+  border-color: #555;
+}
+
+.showtime-date {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 16px;
+}
+
+.showtime-date strong {
+  font-size: 15px;
+}
+
+.showtime-time {
+  color: #e5b34c;
+
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.showtime-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+
+  min-height: 30px;
+
+  margin-bottom: 18px;
+}
+
+.showtime-details span {
+  padding: 5px 8px;
+
+  background: #25252b;
+
+  border-radius: 5px;
+
+  color: #aaa;
+  font-size: 12px;
+}
+
+.showtime-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 15px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #303038;
+}
+
+.showtime-price {
+  font-size: 17px;
+}
+
+.select-showtime {
+  padding: 9px 13px;
+
+  background: #e5b34c;
+  color: #111;
+
+  border-radius: 7px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.select-showtime:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+
+/* REVIEWS */
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-card {
+  padding: 18px 20px;
+
+  background: #18181d;
+
+  border: 1px solid #303038;
+  border-radius: 11px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+}
+
+.review-header strong {
+  font-size: 14px;
+}
+
+.review-header p {
+  margin: 3px 0 0;
+
+  color: #777;
+  font-size: 12px;
+}
+
+.review-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.review-stars span {
+  color: #444;
+  font-size: 19px;
+}
+
+.review-stars span.active {
+  color: #e5b34c;
+}
+
+.review-comment {
+  margin: 15px 0 0;
+  padding-top: 15px;
+
+  border-top: 1px solid #303038;
+
+  color: #c4c4ca;
+
+  line-height: 1.6;
+}
+
+
+/* ESTADOS */
+
+.empty-state {
+  padding: 25px;
+
+  background: #18181d;
+
+  border: 1px solid #303038;
+  border-radius: 11px;
+
+  color: #92929c;
+}
+
+.empty-state h3 {
+  margin: 0 0 6px;
+
+  color: white;
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+.status-message,
+.error-message {
+  text-align: center;
+}
+
+.status-message {
+  color: #999;
+}
+
+.error-message {
+  color: #ff7373;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 750px) {
+
+  .showtimes-page {
+    padding: 25px 15px 50px;
+  }
+
+  .movie-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .poster-container {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  .movie-info h1 {
+    font-size: 2rem;
+  }
+
+  .showtimes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .review-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+}

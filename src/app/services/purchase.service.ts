@@ -14,20 +14,25 @@ export class PurchaseService {
       p_email: purchase.email,
       p_birth_date: purchase.birthDate,
       p_age_notice_accepted: purchase.ageNoticeAccepted,
-      p_use_credit: purchase.useCredit
+      p_use_credit: purchase.useCredit,
+      p_candy_items: purchase.candyItems,
+      p_coupon_code: purchase.couponCode
     });
   }
 
   getPurchaseById(purchaseId: number) {
-  return supabase.from('purchases').select(`id, subtotal, descuento, credito_usado, total, status, email, created_at,
-      showtimes (id, fecha, hora, formato, idioma, precio,
-        movies (id, nombre, imagen),
-        rooms (id, nombre)),
-        showtime_seats (seat_id, status,
-        seats (id, fila, numero, tipo)),
-        tickets (id, code, status, used_at)`)
-    .eq('id', purchaseId)
-    .single();
+    return supabase
+      .from('purchases')
+      .select(`id,subtotal,descuento,descuento_cupon,coupon_id,credito_usado,puntos_generados,total,status,email,created_at,
+        showtimes (id,fecha,hora,formato,idioma,precio,
+        movies (id,nombre,imagen),
+        rooms (id,nombre)),
+        showtime_seats (seat_id,
+        seats (id,fila,numero,tipo)),
+        tickets (id,code,status,used_at),
+        purchase_candy_items (id,item_type,item_id,nombre,precio_unitario,cantidad,subtotal)`)
+      .eq('id', purchaseId)
+      .single();
   }
 
   getGuestPurchase(purchaseId: number, ticketCode: string) {

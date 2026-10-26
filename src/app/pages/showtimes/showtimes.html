@@ -1,0 +1,313 @@
+<section class="showtimes-page">
+
+  @if (loading()) {
+
+    <p class="status-message">
+      Cargando película...
+    </p>
+
+  } @else if (errorMessage()) {
+
+    <p class="error-message">
+      {{ errorMessage() }}
+    </p>
+
+  } @else if (movie(); as movie) {
+
+    <div class="movie-detail">
+
+      <!-- INFORMACIÓN PRINCIPAL -->
+
+      <section class="movie-hero">
+
+        <div class="poster-container">
+
+          <img
+            class="movie-poster"
+            [src]="movie.imagen"
+            [alt]="movie.nombre"
+          >
+
+        </div>
+
+
+        <div class="movie-info">
+
+          <h1>
+            {{ movie.nombre }}
+          </h1>
+
+
+          <!-- RATING -->
+
+          @if (rating()?.cantidad_reviews > 0) {
+
+            <div class="movie-rating">
+
+              <span class="rating-star">
+                ★
+              </span>
+
+              <strong>
+                {{ rating().promedio }}
+              </strong>
+
+              <span>
+                / 5
+              </span>
+
+              <small>
+                {{ rating().cantidad_reviews }}
+
+                @if (rating().cantidad_reviews === 1) {
+                  calificación
+                } @else {
+                  calificaciones
+                }
+              </small>
+
+            </div>
+
+          } @else {
+
+            <p class="no-rating">
+              Esta película todavía no tiene calificaciones.
+            </p>
+
+          }
+
+
+          <!-- DATOS -->
+
+          <div class="movie-meta">
+
+            <span>
+              {{ movie.duracion }} min
+            </span>
+
+            <span>
+              +{{ movie.edad_minima }}
+            </span>
+
+          </div>
+
+
+          <!-- GÉNEROS -->
+
+          <div class="genres">
+
+            @for (genre of movie.generos; track genre) {
+
+              <span class="genre">
+                {{ genre }}
+              </span>
+
+            }
+
+          </div>
+
+
+          <p class="synopsis">
+            {{ movie.sinopsis }}
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- FUNCIONES -->
+
+      <section class="showtimes-section">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>
+              Funciones disponibles
+            </h2>
+
+            <p>
+              Seleccioná una función para elegir tus butacas.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        @if (showtimes().length > 0) {
+
+          <div class="showtimes-grid">
+
+            @for (showtime of showtimes(); track showtime.id) {
+
+              <article class="showtime-card">
+
+                <div class="showtime-date">
+
+                  <strong>
+                    {{ showtime.fecha | date:'dd/MM/yyyy' }}
+                  </strong>
+
+                  <span class="showtime-time">
+                    {{ showtime.hora?.slice(0, 5) }}
+                  </span>
+
+                </div>
+
+
+                <div class="showtime-details">
+
+                  <span>
+                    {{ showtime.formato }}
+                  </span>
+
+                  <span>
+                    {{ showtime.idioma }}
+                  </span>
+
+                  @if (showtime.rooms?.nombre) {
+
+                    <span>
+                      {{ showtime.rooms.nombre }}
+                    </span>
+
+                  }
+
+                </div>
+
+
+                <div class="showtime-footer">
+
+                  <strong class="showtime-price">
+                    ${{ showtime.precio }}
+                  </strong>
+
+                  <a
+                    class="select-showtime"
+                    [routerLink]="['/showtime', showtime.id, 'seats']"
+                  >
+                    Elegir función
+                  </a>
+
+                </div>
+
+              </article>
+
+            }
+
+          </div>
+
+        } @else {
+
+          <div class="empty-state">
+
+            <h3>
+              No hay funciones disponibles
+            </h3>
+
+            <p>
+              Esta película no tiene funciones próximas programadas.
+            </p>
+
+          </div>
+
+        }
+
+      </section>
+
+
+      <!-- OPINIONES -->
+
+      <section class="reviews-section">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>
+              Opiniones
+            </h2>
+
+            <p>
+              Calificaciones de usuarios que compraron entradas para esta película.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        @if (reviews().length > 0) {
+
+          <div class="reviews-list">
+
+            @for (review of reviews(); track review.id) {
+
+              <article class="review-card">
+
+                <div class="review-header">
+
+                  <div>
+
+                    <strong>
+                      Usuario verificado
+                    </strong>
+
+                    <p>
+                      {{ review.created_at | date:'dd/MM/yyyy' }}
+                    </p>
+
+                  </div>
+
+
+                  <div class="review-stars">
+
+                    @for (selected of getStars(review.rating); track $index) {
+
+                      <span [class.active]="selected">
+                        ★
+                      </span>
+
+                    }
+
+                  </div>
+
+                </div>
+
+
+                @if (review.comentario) {
+
+                  <p class="review-comment">
+                    "{{ review.comentario }}"
+                  </p>
+
+                }
+
+              </article>
+
+            }
+
+          </div>
+
+        } @else {
+
+          <div class="empty-state">
+
+            <p>
+              Todavía no hay opiniones sobre esta película.
+            </p>
+
+          </div>
+
+        }
+
+      </section>
+
+    </div>
+
+  }
+
+</section>

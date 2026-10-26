@@ -70,6 +70,25 @@
   flex: 1;
 }
 
+.movie-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  margin-top: 8px;
+
+  color: #e5b34c;
+}
+
+.movie-rating small {
+  color: #999;
+}
+
+.no-rating {
+  color: #777;
+  font-size: 13px;
+}
+
 
 /* BOTÓN */
 

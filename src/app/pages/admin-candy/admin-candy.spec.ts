@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MovieShowtimes } from './movie-showtimes';
+import { AdminCandy } from './admin-candy';
 
-describe('MovieShowtimes', () => {
-  let component: MovieShowtimes;
-  let fixture: ComponentFixture<MovieShowtimes>;
+describe('AdminCandy', () => {
+  let component: AdminCandy;
+  let fixture: ComponentFixture<AdminCandy>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MovieShowtimes],
+      imports: [AdminCandy],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MovieShowtimes);
+    fixture = TestBed.createComponent(AdminCandy);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

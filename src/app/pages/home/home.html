@@ -1,74 +1,131 @@
-<main class="home">
+<div class="home">
 
-    <section class="banner">
-        <div class="banner-content">
-            <span class="banner-tag">Estreno destacado</span>
+  <!-- TOP 3 -->
 
-            <h1>Viví el cine como nunca antes</h1>
+  @if (topMovies().length > 0) {
 
-            <p>
-                Descubrí los últimos estrenos, elegí tu función
-                y reservá tus butacas.
-            </p>
+    <section class="top-movies">
 
-            <button type="button" class="primary-button">
-                Ver funciones
-            </button>
-        </div>
-    </section>
+      <h2>Mejor calificadas</h2>
 
+      <div class="top-grid">
 
-    <section class="movies-section">
+        @for (movie of topMovies(); track movie.movie_id; let i = $index) {
 
-        <div class="section-header">
-            <div>
-                <span class="section-label">Ahora en cartelera</span>
-                <h2>Películas</h2>
+          <article class="top-card">
+
+            <span class="position">
+              #{{ i + 1 }}
+            </span>
+
+            <img
+              [src]="movie.imagen"
+              [alt]="movie.nombre"
+            >
+
+            <div class="top-info">
+
+              <h3>
+                {{ movie.nombre }}
+              </h3>
+
+              <p class="top-rating">
+                ★ {{ movie.promedio }}
+              </p>
+
+              <small>
+                {{ movie.cantidad_reviews }}
+
+                @if (movie.cantidad_reviews === 1) {
+                  calificación
+                } @else {
+                  calificaciones
+                }
+              </small>
+
             </div>
 
-            <button type="button" class="secondary-button">
-                Ver todas
-            </button>
-        </div>
+          </article>
 
+        }
 
-        <div class="filters">
-
-            <input type="text" placeholder="Buscar película..." class="search-input" (input)="onSearch($event)" />
-
-            <select class="genre-select" (change)="onGenreChange($event)">
-                <option value="">Todos los géneros</option>
-                @for (genre of genresSet(); track genre) {
-                <option [value]="genre">{{ genre }}</option>}
-            </select>
-
-        </div>
-
-
-        <div class="movies-grid">
-
-            @for (movie of filteredMovies(); track movie.id) {
-            <app-movie-card [movie]="movie"></app-movie-card>
-            }
-        </div>
+      </div>
 
     </section>
 
+  }
 
-    <section class="coming-soon">
 
-        <div class="section-header">
-            <div>
-                <span class="section-label">Muy pronto</span>
-                <h2>Próximamente</h2>
-            </div>
-        </div> 
+  <!-- PELÍCULAS -->
 
-        <p>
-            Descubrí las películas que llegan próximamente
-            y preparate para sus estrenos.
-        </p>
+  <section class="movies-section">
 
-    </section>
+    <div class="movies-header">
 
-</main>
+      <h2>Películas</h2>
+
+      <div class="filters">
+
+        <!-- BUSCADOR -->
+
+        <input
+          type="text"
+          placeholder="Buscar película..."
+          (input)="onSearch($event)"
+        >
+
+
+        <!-- FILTRO POR GÉNERO -->
+
+        <select
+          [value]="selectedgenre()"
+          (change)="onGenreChange($event)"
+        >
+
+          <option value="">
+            Todos los géneros
+          </option>
+
+          @for (genre of genresSet(); track genre) {
+
+            <option [value]="genre">
+              {{ genre }}
+            </option>
+
+          }
+
+        </select>
+
+      </div>
+
+    </div>
+
+
+    <!-- LISTADO DE PELÍCULAS -->
+
+    @if (filteredMovies().length > 0) {
+
+      <div class="movies-grid">
+
+        @for (movie of filteredMovies(); track movie.id) {
+
+          <app-movie-card
+            [movie]="movie"
+            [rating]="getRating(movie.id)"
+          />
+
+        }
+
+      </div>
+
+    } @else {
+
+      <p class="empty-message">
+        No se encontraron películas.
+      </p>
+
+    }
+
+  </section>
+
+</div>
