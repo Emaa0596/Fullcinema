@@ -7,4 +7,7 @@ export interface Movie {
     sinopsis: string;
     generos: string[];
     edadMinima: number;
+    fechaEstreno?: string | null;
+    preventaHabilitada?: boolean;
+    precioPreventa?: number;
 }

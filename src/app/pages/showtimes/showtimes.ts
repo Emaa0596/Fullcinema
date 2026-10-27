@@ -69,7 +69,21 @@ export class Showtimes {
       return;
     }
 
-    this.showtimes.set(data ?? []);
+    const showtimes = (data ?? []).map((showtime: any) => {
+      const movie = showtime.movies;
+      const presaleActive =
+        movie?.fecha_estreno &&
+        movie?.preventa_habilitada &&
+        this.isPresaleActive(movie);
+
+      return {...showtime,
+        precioOriginal: Number(showtime.precio),
+        precio: presaleActive ? Number(showtime.precio_preventa) : Number(showtime.precio),
+        preventaActiva: presaleActive
+      };
+    });
+
+    this.showtimes.set(showtimes);
   }
 
   private async loadRating(movieId: number) {
@@ -97,4 +111,18 @@ export class Showtimes {
   getStars(rating: number) {
     return [1, 2, 3, 4, 5].map(star => star <= rating);
   }
+
+  isPresaleActive(movie: any) {
+    if (!movie?.fecha_estreno || !movie?.preventa_habilitada) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const releaseDate = new Date(`${movie.fecha_estreno}T00:00:00`);
+    const presaleStart = new Date(releaseDate);
+    presaleStart.setDate(presaleStart.getDate() - 7);
+
+    return today >= presaleStart && today < releaseDate;
+  }
+
 }

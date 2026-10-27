@@ -18,10 +18,15 @@ export class AdminCandy {
   readonly coupons = signal<any[]>([]);
   readonly comboProductQuantities = signal<Record<number, number>>({});
 
-  readonly section = signal<'products' | 'categories' | 'combos' | 'coupons'>('products');
+  readonly section = signal< 'products' |'categories' | 'combos' | 'coupons' | 'settings' | 'rewards' >('products');
+  readonly rewards = signal<any[]>([]);
 
   readonly errorMessage = signal('');
   readonly successMessage = signal('');
+
+  firstPurchaseDiscount = 20;
+  pointsPerPeso = 1;
+  
 
   productForm = {
     id: null as number | null,
@@ -79,7 +84,6 @@ export class AdminCandy {
       porcentaje: this.couponForm.porcentaje,
       fecha_desde: this.couponForm.fecha_desde || null,
       fecha_hasta: this.couponForm.fecha_hasta || null,
-      activo: true
     };
 
     const result = this.couponForm.id
@@ -147,22 +151,24 @@ export class AdminCandy {
   }
 
   private async loadData() {
-    const [
-      categoriesResult,
-      productsResult,
-      combosResult,
-      couponsResult
-    ] = await Promise.all([
+    const [categoriesResult,productsResult,combosResult,couponsResult, settingsResult, rewardsResult] = await Promise.all([
       this.candyService.getAllCategoriesAdmin(),
       this.candyService.getAllProductsAdmin(),
       this.candyService.getAllCombosAdmin(),
-      this.candyService.getAllCouponsAdmin()
+      this.candyService.getAllCouponsAdmin(),
+      this.candyService.getSettings(),
+      this.candyService.getAllRewards()
     ]);
 
     this.categories.set(categoriesResult.data ?? []);
     this.products.set(productsResult.data ?? []);
     this.combos.set(combosResult.data ?? []);
     this.coupons.set(couponsResult.data ?? []);
+    this.rewards.set(rewardsResult.data ?? []);
+    for (const setting of settingsResult.data ?? []) {
+      if (setting.key === 'first_purchase_discount') this.firstPurchaseDiscount = Number(setting.value);
+      if (setting.key === 'points_per_peso') this.pointsPerPeso = Number(setting.value);
+    }
     
   }
 
@@ -182,7 +188,6 @@ export class AdminCandy {
       imagen: this.productForm.imagen.trim() || null,
       precio: this.productForm.precio,
       stock: this.productForm.stock,
-      activo: true
     };
 
     const result = this.productForm.id
@@ -215,7 +220,7 @@ export class AdminCandy {
 
     const payload = {
       nombre: this.categoryForm.nombre.trim(),
-      activo: true
+
     };
 
     const result = this.categoryForm.id
@@ -350,7 +355,6 @@ export class AdminCandy {
       descripcion: this.comboForm.descripcion.trim() || null,
       imagen: this.comboForm.imagen.trim() || null,
       precio: this.comboForm.precio,
-      activo: true
     };
 
     let comboId: number;
@@ -453,6 +457,49 @@ export class AdminCandy {
     );
 
     await this.loadData();
+  }
+
+  async saveSettings() {
+    this.errorMessage.set('');
+    this.successMessage.set('');
+
+    const [discountResult, pointsResult] = await Promise.all([
+      this.candyService.updateSetting('first_purchase_discount', this.firstPurchaseDiscount),
+      this.candyService.updateSetting('points_per_peso', this.pointsPerPeso)
+    ]);
+
+    if (discountResult.error || pointsResult.error) {
+      this.errorMessage.set(
+        discountResult.error?.message ??
+        pointsResult.error?.message ??
+        'No se pudo guardar la configuración.'
+      );
+      return;
+    }
+
+    this.successMessage.set('Configuración actualizada correctamente.');
+  }
+
+  async updateRewardCost(reward: any) {
+    this.errorMessage.set('');
+    this.successMessage.set('');
+
+    if (reward.costo_puntos <= 0) {
+      this.errorMessage.set('El costo en puntos debe ser mayor a 0.');
+      return;
+    }
+
+    const { error } = await this.candyService.updateRewardCost(
+      reward.id,
+      reward.costo_puntos
+    );
+
+    if (error) {
+      this.errorMessage.set(error.message);
+      return;
+    }
+
+    this.successMessage.set('Costo de recompensa actualizado correctamente.');
   }
 
 }

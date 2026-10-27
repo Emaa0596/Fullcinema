@@ -32,6 +32,5 @@ export const routes: Routes = [
     {path: 'purchase/:id', component: PurchaseDetail},
     {path: 'my-purchases', component: MyPurchases, canActivate: [authGuard]},
     {path: 'candy', component: Candy},
-    { path: 'admin/candy', component: AdminCandy, canActivate: [adminGuard]}
+    {path: 'admin/candy', component: AdminCandy, canActivate: [adminGuard]}
 ];
-    

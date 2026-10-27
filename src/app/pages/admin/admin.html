@@ -45,6 +45,17 @@
           <input type="number" formControlName="edadMinima">
         </label>
 
+        <label>
+          <span>Fecha de estreno</span>
+          <input type="date" formControlName="fechaEstreno">
+        </label>
+
+        <label>
+          <span>Preventa habilitada</span>
+          <input type="checkbox" formControlName="preventaHabilitada">
+        </label>
+
+
         <button type="submit">
           @if (editingMovieId() !== null) {
           Guardar cambios
@@ -130,11 +141,6 @@
           </select>
         </label>
 
-        <label>
-          Precio
-          <input type="number" formControlName="precio">
-        </label>
-
         <button type="submit">
           Crear función
         </button>
@@ -154,6 +160,50 @@
     </section>
 
   </div>
+
+  <section class="ticket-prices-section">
+
+    <h2>Precios de entradas</h2>
+
+    <p>Configurá el precio normal y de preventa para cada formato.</p>
+
+    @if (priceError()) {
+    <p class="error-message">{{ priceError() }}</p>
+    }
+
+    @if (priceMessage()) {
+    <p class="success-message">{{ priceMessage() }}</p>
+    }
+
+    <div class="ticket-prices-grid">
+
+      @for (price of ticketPrices(); track price.formato) {
+
+      <article class="ticket-price-card">
+
+        <h3>{{ price.formato }}</h3>
+
+        <label>
+          <span>Precio normal</span>
+          <input type="number" min="0" [(ngModel)]="price.precio_normal">
+        </label>
+
+        <label>
+          <span>Precio preventa</span>
+          <input type="number" min="0" [(ngModel)]="price.precio_preventa">
+        </label>
+
+        <button type="button" (click)="saveTicketPrice(price)">
+          Guardar
+        </button>
+
+      </article>
+
+      }
+
+    </div>
+
+  </section>
 
 
   <!-- LISTADO -->
@@ -238,7 +288,7 @@
           </p>
         </div>
         <button type="button" (click)="deleteShowtime(showtime.id)">
-            Eliminar
+          Eliminar
         </button>
 
       </article>

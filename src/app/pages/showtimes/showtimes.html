@@ -178,12 +178,16 @@
 
                 </div>
 
-
                 <div class="showtime-footer">
 
-                  <strong class="showtime-price">
-                    ${{ showtime.precio }}
-                  </strong>
+                  <div class="showtime-price">
+                    @if (showtime.preventaActiva) {
+                      <span class="presale-badge">PREVENTA</span>
+                      <strong>Precio preventa: ${{ showtime.precio }}</strong>
+                    } @else {
+                      <strong>Precio: ${{ showtime.precio }}</strong>
+                    }
+                  </div>
 
                   <a
                     class="select-showtime"

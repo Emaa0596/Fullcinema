@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormsModule, FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../models/movie.model';
 import { ShowtimeService } from '../../services/showtime.service';
 
 @Component({
   selector: 'app-admin',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormsModule],
   templateUrl: './admin.html',
   styleUrl: './admin.css'
 })
@@ -14,6 +14,7 @@ export class Admin {
   constructor() {
     this.loadMovies();
     this.loadShowtimes();
+    this.loadTicketPrices();
   }
 
   private readonly fb = inject(FormBuilder);
@@ -28,13 +29,20 @@ export class Admin {
   readonly showtimeMessage = signal('');
   readonly showtimeError = signal('');
 
+  readonly ticketPrices = signal<any[]>([]);
+  readonly priceMessage = signal('');
+  readonly priceError = signal('');
+
   readonly movieForm = this.fb.nonNullable.group({
     nombre: ['', Validators.required],
     imagen: ['', Validators.required],
     duracion: [0, [Validators.required, Validators.min(1)]],
     sinopsis: ['', Validators.required],
     generos: ['', Validators.required],
-    edadMinima: [0, [Validators.required, Validators.min(0)]]
+    edadMinima: [0, [Validators.required, Validators.min(0)]],
+    fechaEstreno: [''],
+    preventaHabilitada: [false],
+    precioPreventa: [0, Validators.min(0)]
   });
 
   readonly showtimeForm = this.fb.nonNullable.group({
@@ -42,8 +50,7 @@ export class Admin {
     fecha: ['', Validators.required],
     hora: ['', Validators.required],
     formato: ['', Validators.required],
-    idioma: ['', Validators.required],
-    precio: [0, [Validators.required, Validators.min(1)]]
+    idioma: ['', Validators.required]
   });
 
   private async loadShowtimes() {
@@ -70,7 +77,6 @@ export class Admin {
       hora: values.hora,
       formato: values.formato,
       idioma: values.idioma,
-      precio: values.precio
     });
 
     if (error) {
@@ -79,7 +85,7 @@ export class Admin {
     }
     this.showtimeMessage.set(`Función creada para el ${values.fecha} a las ${values.hora}.`);
     await this.loadShowtimes();
-    this.showtimeForm.reset({movieId: 0,fecha: '',hora: '',formato: '',idioma: '',precio: 0});
+    this.showtimeForm.reset({movieId: 0,fecha: '',hora: '',formato: '',idioma: ''});
   }
 
   async deleteShowtime(id: number) {
@@ -116,7 +122,9 @@ export class Admin {
       duracion: movie.duracion,
       sinopsis: movie.sinopsis,
       generos: movie.generos,
-      edadMinima: movie.edad_minima
+      edadMinima: movie.edad_minima,
+      fechaEstreno: movie.fecha_estreno,
+      preventaHabilitada: movie.preventa_habilitada
     }));
 
     this.movies.set(movies);
@@ -145,7 +153,9 @@ export class Admin {
         .map(genero => genero.trim())
         .filter(genero => genero)
         .map(genero => this.capitalize(genero)),
-      edad_minima: values.edadMinima
+      edad_minima: values.edadMinima,
+      fecha_estreno: values.fechaEstreno || null,
+      preventa_habilitada: values.preventaHabilitada
     };
 
     const id = this.editingMovieId();
@@ -178,7 +188,9 @@ export class Admin {
       duracion: movie.duracion,
       sinopsis: movie.sinopsis,
       generos: movie.generos.join(', '),
-      edadMinima: movie.edadMinima
+      edadMinima: movie.edadMinima,
+      fechaEstreno: movie.fechaEstreno ?? '',
+      preventaHabilitada: movie.preventaHabilitada ?? false
     });
   }
 
@@ -209,7 +221,44 @@ export class Admin {
       duracion: 0,
       sinopsis: '',
       generos: '',
-      edadMinima: 0
+      edadMinima: 0,
+      fechaEstreno: '',
+      preventaHabilitada: false
     });
   }
+
+  private async loadTicketPrices() {
+    const { data, error } = await this.showtimeService.getTicketPrices();
+    if (error) {
+      this.priceError.set(error.message);
+      return;
+    }
+    this.ticketPrices.set(data ?? []);
+  }
+
+  async saveTicketPrice(price: any) {
+    this.priceMessage.set('');
+    this.priceError.set('');
+
+    if (price.precio_normal < 0 || price.precio_preventa < 0) {
+      this.priceError.set('Los precios no pueden ser negativos.');
+      return;
+    }
+
+    const { error } = await this.showtimeService.updateTicketPrice(
+      price.formato,
+      price.precio_normal,
+      price.precio_preventa
+    );
+
+    if (error) {
+      this.priceError.set(error.message);
+      return;
+    }
+
+    this.priceMessage.set(`Precios de ${price.formato} actualizados.`);
+    await this.loadTicketPrices();
+    await this.loadShowtimes();
+  }
+
 }

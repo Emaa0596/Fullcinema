@@ -3,6 +3,8 @@ import { DatePipe } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { ProfileService } from '../../services/profile.service';
 import { ProfileStore } from '../../services/profile.store.service';
+import { PurchaseService } from '../../services/purchase.service';
+import { ReviewService } from '../../services/review.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,9 +15,10 @@ import { ProfileStore } from '../../services/profile.store.service';
 export class Profile {
 
   readonly profileStore = inject(ProfileStore);
-
   private readonly auth = inject(AuthService);
   private readonly profileService = inject(ProfileService);
+  private readonly purchaseService = inject(PurchaseService);
+  private readonly reviewService = inject(ReviewService);
 
   readonly loyaltyTransactions = signal<any[]>([]);
   readonly rewards = signal<any[]>([]);
@@ -25,16 +28,19 @@ export class Profile {
   readonly successMessage = signal('');
   readonly errorMessage = signal('');
 
+  readonly myMovies = signal<any[]>([]);
+  readonly myReviews = signal<any[]>([]);
+
   constructor() {
     this.initialize();
   }
 
   private async initialize() {
     await this.auth.initialized;
-
     await this.profileStore.loadProfile();
     await this.loadLoyaltyTransactions();
     await this.loadRewards();
+    await this.loadMyMovies();
   }
 
   email() {
@@ -97,4 +103,57 @@ export class Profile {
     await this.profileStore.loadProfile();
     await this.loadLoyaltyTransactions();
   }
+
+  private async loadMyMovies() {
+    const userId = this.auth.session()?.user.id;
+    if (!userId) return;
+
+    const [purchasesResult, reviewsResult] = await Promise.all([
+      this.purchaseService.getMyMovies(),
+      this.reviewService.getMyReviews(userId)
+    ]);
+
+    if (purchasesResult.error) {
+      console.error('Error cargando películas:', purchasesResult.error);
+      return;
+    }
+
+    if (reviewsResult.error) {
+      console.error('Error cargando reseñas:', reviewsResult.error);
+      return;
+    }
+
+    console.log('Compras para Mis películas:', purchasesResult.data);
+
+    const reviews = reviewsResult.data ?? [];
+
+    const movies = (purchasesResult.data ?? [])
+      .filter((purchase: any) => {
+        const ticket = purchase.tickets;
+
+        if (Array.isArray(ticket)) {
+          return ticket.some((item: any) => item.status === 'used');
+        }
+
+        return ticket?.status === 'used';
+      })
+      .map((purchase: any) => {
+        const movie = purchase.showtimes?.movies;
+
+        return {
+          id: movie?.id,
+          nombre: movie?.nombre,
+          imagen: movie?.imagen,
+          fecha: purchase.showtimes?.fecha,
+          rating: reviews.find((review: any) => review.movie_id === movie?.id)?.rating ?? null
+        };
+      });
+
+    this.myMovies.set(
+      movies.filter((movie: any, index: number, array: any[]) =>
+        index === array.findIndex(item => item.id === movie.id)
+      )
+    );
+  }
+
 }

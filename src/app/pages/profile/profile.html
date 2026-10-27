@@ -117,6 +117,57 @@
 
       }
 
+      <section class="my-movies">
+
+        <h2>Mis películas</h2>
+
+        @if (myMovies().length === 0) {
+
+          <p>Todavía no tenés películas en tu historial.</p>
+
+        } @else {
+
+          <div class="movies-grid">
+
+            @for (movie of myMovies(); track movie.id) {
+
+              <article class="my-movie-card">
+
+                <img
+                  class="my-movie-poster"
+                  [src]="movie.imagen"
+                  [alt]="movie.nombre"
+                >
+
+                <div>
+                  <h3>{{ movie.nombre }}</h3>
+
+                  <p>
+                    Vista el {{ movie.fecha }}
+                  </p>
+
+                  @if (movie.rating) {
+                    <p>
+                      Tu calificación: ⭐ {{ movie.rating }}/5
+                    </p>
+                  } @else {
+                    <p>
+                      Todavía no calificaste esta película.
+                    </p>
+                  }
+
+                </div>
+
+              </article>
+
+            }
+
+          </div>
+
+        }
+
+      </section>
+
 
       <!-- RECOMPENSAS -->
 

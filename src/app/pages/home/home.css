@@ -338,6 +338,97 @@
   color: #9999a0;
 }
 
+.upcoming-carousel {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 15px;
+}
+
+.upcoming-card {
+  flex: 0 0 190px;
+}
+
+.upcoming-card img {
+  width: 100%;
+  aspect-ratio: 10 / 14;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.upcoming-info {
+  margin-top: 10px;
+}
+
+.upcoming-info h3 {
+  margin: 0 0 5px;
+}
+
+
+
+.presale-section,
+.upcoming-section {
+  margin-top: 50px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 20px;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  opacity: 0.7;
+}
+
+.presale-section {
+  padding: 30px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.presale-card {
+  max-width: 220px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.poster-container {
+  position: relative;
+}
+
+.poster-container img {
+  width: 100%;
+  aspect-ratio: 10 / 14;
+  object-fit: cover;
+  display: block;
+}
+
+.presale-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: #fff;
+  color: #111;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.presale-info {
+  padding: 12px 0;
+}
+
+.presale-price {
+  font-size: 18px;
+  font-weight: 700;
+}
 
 /* RESPONSIVE */
 

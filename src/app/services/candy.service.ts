@@ -268,4 +268,35 @@ export class CandyService {
       .order('nombre');
   }
 
+  getSettings() {
+    return supabase
+      .from('settings')
+      .select('key,value');
+  }
+
+  updateSetting(key: string, value: number) {
+    return supabase
+      .from('settings')
+      .update({ value })
+      .eq('key', key)
+      .select()
+      .single();
+  }
+
+  getAllRewards() {
+    return supabase
+      .from('loyalty_rewards')
+      .select('id,nombre,descripcion,costo_puntos,credito_otorgado,activo')
+      .order('nombre');
+  }
+
+  updateRewardCost(id: number, costoPuntos: number) {
+    return supabase
+      .from('loyalty_rewards')
+      .update({ costo_puntos: costoPuntos })
+      .eq('id', id)
+      .select()
+      .single();
+  }
+
 }

@@ -368,6 +368,21 @@
 }
 
 
+
+.showtime-price {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.presale-badge {
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 750px) {

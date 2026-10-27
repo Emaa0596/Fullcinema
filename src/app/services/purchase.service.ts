@@ -56,4 +56,12 @@ export class PurchaseService {
         rooms (id,nombre)))`).order('created_at', { ascending: false });
   }
 
+  getMyMovies() {
+    return supabase
+      .from('purchases')
+      .select(`id,status,created_at,showtimes (fecha,hora,movies (id,nombre,imagen)),tickets (status,used_at)`)
+      .eq('status', 'confirmed')
+      .order('created_at', { ascending: false });
+  }
+
 }

@@ -128,4 +128,108 @@
 
   </section>
 
+  @if (presaleMovies().length > 0) {
+
+    <section class="presale-section">
+
+      <div class="section-header">
+        <div>
+          <span class="section-label">VENTA ANTICIPADA</span>
+          <h2>Preventa</h2>
+        </div>
+
+        <p>
+          Conseguí tus entradas antes del estreno.
+        </p>
+      </div>
+
+      <div class="movies-grid">
+
+        @for (movie of presaleMovies(); track movie.id) {
+
+          <article class="presale-card">
+
+            <div class="poster-container">
+
+              <img
+                [src]="movie.imagen"
+                [alt]="movie.nombre"
+              >
+
+              <span class="presale-badge">
+                PREVENTA
+              </span>
+
+            </div>
+
+            <div class="presale-info">
+
+              <h3>{{ movie.nombre }}</h3>
+
+              <p>
+                Estreno: {{ movie.fechaEstreno }}
+              </p>
+
+              <p class="presale-price">
+                ${{ movie.precioPreventa }}
+              </p>
+
+              <a [routerLink]="['/movies', movie.id, 'showtimes']" >
+                Comprar entradas
+              </a>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    </section>
+
+  }
+
+  @if (upcomingMovies().length > 0) {
+
+    <section class="upcoming-section">
+
+      <div class="section-header">
+        <div>
+          <span class="section-label">PRÓXIMOS ESTRENOS</span>
+          <h2>Próximamente</h2>
+        </div>
+      </div>
+
+      <div class="upcoming-carousel">
+
+        @for (movie of upcomingMovies(); track movie.id) {
+
+          <article class="upcoming-card">
+
+            <img
+              [src]="movie.imagen"
+              [alt]="movie.nombre"
+            >
+
+            <div class="upcoming-info">
+
+              <h3>{{ movie.nombre }}</h3>
+
+              <p>
+                Estreno: {{ movie.fechaEstreno }}
+              </p>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    </section>
+
+  }
+
 </div>

@@ -19,6 +19,14 @@
       <button type="button" [class.active]="section() === 'coupons'" (click)="section.set('coupons')">
         Cupones
       </button>
+
+      <button type="button" [class.active]="section() === 'settings'" (click)="section.set('settings')">
+        Configuración
+      </button>
+
+      <button type="button" [class.active]="section() === 'rewards'" (click)="section.set('rewards')">
+        Recompensas
+      </button>
     </div>
   </div>
 
@@ -522,5 +530,104 @@
     </section>
 
   }
+
+      @if (section() === 'settings') {
+
+      <section class="admin-section">
+
+        <h2>Configuración general</h2>
+
+        <div class="admin-form">
+
+          <label>
+            <span>Descuento primera compra (%)</span>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              [(ngModel)]="firstPurchaseDiscount"
+            >
+          </label>
+
+          <label>
+            <span>Puntos generados por peso</span>
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              [(ngModel)]="pointsPerPeso"
+            >
+          </label>
+
+          <div class="form-actions">
+            <button type="button" (click)="saveSettings()">
+              Guardar configuración
+            </button>
+          </div>
+
+        </div>
+
+      </section>
+
+    }
+
+    @if (section() === 'rewards') {
+
+      <section class="admin-section">
+
+        <h2>Recompensas</h2>
+
+        <p>
+          Configurá cuántos puntos necesita el usuario para canjear cada recompensa.
+        </p>
+
+        <div class="admin-list">
+
+          @for (reward of rewards(); track reward.id) {
+
+            <article class="admin-item">
+
+              <div>
+                <strong>{{ reward.nombre }}</strong>
+
+                @if (reward.descripcion) {
+                  <span>{{ reward.descripcion }}</span>
+                }
+
+                <span>
+                  Crédito otorgado: ${{ reward.credito_otorgado }}
+                </span>
+              </div>
+
+              <div class="reward-cost">
+
+                <label>
+                  <span>Costo en puntos</span>
+
+                  <input
+                    type="number"
+                    min="1"
+                    [(ngModel)]="reward.costo_puntos"
+                  >
+                </label>
+
+                <button
+                  type="button"
+                  (click)="updateRewardCost(reward)"
+                >
+                  Guardar
+                </button>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      </section>
+
+    }
 
 </section>
