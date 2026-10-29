@@ -20,6 +20,7 @@ export class Home {
   private readonly reviewService = inject(ReviewService);
   readonly movieRatings = signal<any[]>([]);
   readonly topMovies = signal<any[]>([]);
+  readonly featuredMovies = computed(() => this.movies().filter(movie => movie.destacada));
 
   constructor() {
     this.loadMovies();
@@ -45,20 +46,16 @@ export class Home {
       edadMinima: movie.edad_minima,
       fechaEstreno: movie.fecha_estreno,
       preventaHabilitada: movie.preventa_habilitada,
-      precioPreventa: movie.precio_preventa
+      precioPreventa: movie.precio_preventa,
+      destacada: movie.destacada ?? false
     }));
 
     this.movies.set(movies);
   }
 
   private async loadTopMovies() {
-    const { data, error } = await this.reviewService.getTopMovies();
-
-    if (error) {
-      console.error('Error cargando Top 3:', error);
-      return;
-    }
-
+    const { data,error } = await this.movieService.getTopMovies();
+    if(error){ console.error(error); return; }
     this.topMovies.set(data ?? []);
   }
 

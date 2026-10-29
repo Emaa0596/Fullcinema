@@ -1,0 +1,9 @@
+.activity-page {min-height:100vh;padding:35px 8%;background:#0d0d0f;color:#fff;}
+.activity-header {margin-bottom:30px;}
+.activity-header h1 {margin:0 0 6px;font-size:34px;}
+.activity-header p {margin:0;color:#aaa;}
+.table-container {overflow-x:auto;background:#18181d;border:1px solid #333;border-radius:12px;padding:20px;}
+table {width:100%;border-collapse:collapse;}
+th,td {padding:12px;text-align:left;border-bottom:1px solid #333;}
+th {color:#e5b34c;}
+.error {padding:12px;background:#451b1b;border-radius:8px;}

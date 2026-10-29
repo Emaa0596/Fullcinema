@@ -9,4 +9,8 @@ export class TicketService {
   validateTicket(code: string) {
     return supabase.rpc('validate_ticket', { p_code: code});
   }
+
+  validateCandy(code: string) {
+    return supabase.rpc('validate_candy',{ p_ticket_code: code });
+  }
 }

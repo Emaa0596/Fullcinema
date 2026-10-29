@@ -21,10 +21,14 @@ export class ShowtimeService {
     }
 
     getShowtimesByMovie(movieId: number) {
-        return supabase
-            .from('showtimes')
-            .select(`id,movie_id,room_id,fecha,hora,formato,idioma,precio,movies (fecha_estreno,preventa_habilitada,precio_preventa)`)
-            .eq('movie_id', movieId);
+        const today = new Date().toISOString().split('T')[0];
+        return supabase.from('showtimes')
+            .select(`id,movie_id,room_id,fecha,hora,formato,idioma,precio,precio_preventa,rooms (id,nombre),
+                movies (id,nombre,imagen,duracion,sinopsis,generos,edad_minima,fecha_estreno,preventa_habilitada)`)
+            .eq('movie_id', movieId)
+            .gte('fecha', today)
+            .order('fecha')
+            .order('hora');
     }
 
     async createShowtime(showtime: { movieId: number; fecha: string; hora: string; formato: string; idioma: string; }) {

@@ -23,6 +23,7 @@ export class PurchaseDetail {
   private readonly profileStore = inject(ProfileStore);
 
   readonly purchase = signal<any | null>(null);
+  readonly vipSurcharge = signal(0);
   readonly loading = signal(true);
   readonly errorMessage = signal('');
 
@@ -74,6 +75,8 @@ export class PurchaseDetail {
     }
 
     this.purchase.set(data);
+    const { data: vipSetting } = await this.purchaseService.getVipSurcharge();
+    this.vipSurcharge.set(Number(vipSetting?.value ?? 0));
     console.log('COMPRA COMPLETA:', data);
   }
 
@@ -102,6 +105,18 @@ export class PurchaseDetail {
     if (!date) return '';
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
+  }
+
+  vipCount(purchase: any) {
+    return purchase.showtime_seats?.filter((item: any) => item.seats?.tipo === 'vip').length ?? 0;
+  }
+
+  candySubtotal(purchase: any) {
+    return purchase.purchase_candy_items?.reduce((total: number,item: any) => total + Number(item.subtotal),0) ?? 0;
+  }
+
+  ticketsSubtotal(purchase: any) {
+    return Number(purchase.subtotal) - this.candySubtotal(purchase);
   }
 
   generatePdf() {
@@ -138,20 +153,28 @@ export class PurchaseDetail {
 
     // ENTRADAS
     const ticketQuantity = purchase.showtime_seats?.length ?? 0;
-    const ticketPrice = Number(purchase.showtimes?.precio ?? 0);
-    const ticketsSubtotal = ticketQuantity * ticketPrice;
+    const vipCount = this.vipCount(purchase);
+    const ticketsSubtotal = this.ticketsSubtotal(purchase);
 
     pdf.setFontSize(13);
     pdf.text('Entradas', 20, y);
     y += 8;
 
     pdf.setFontSize(11);
-    pdf.text(`${ticketQuantity} x $${ticketPrice} = $${ticketsSubtotal}`, 25, y);
+    pdf.text(`Cantidad: ${ticketQuantity}`,25,y);
+    y += 7;
+
+    if (vipCount > 0) {
+      pdf.text(`Recargo VIP: ${vipCount} x $${this.vipSurcharge()}`,25,y);
+      y += 7;
+    }
+
+    pdf.text(`Subtotal entradas: $${ticketsSubtotal}`,25,y);
     y += 8;
 
     // BUTACAS
-    const seats = purchase.showtime_seats.map((item: any) => `${item.seats?.fila}${item.seats?.numero}`).join(', ');
-    pdf.text(`Butacas: ${seats}`, 25, y);
+    const seats = purchase.showtime_seats.map((item: any) => `${item.seats?.fila}${item.seats?.numero}${item.seats?.tipo === 'vip' ? ' (VIP)' : ''}`).join(', ');
+    pdf.text(`Butacas: ${seats}`,25,y);
     y += 12;
 
     // CANDY

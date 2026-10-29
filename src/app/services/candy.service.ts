@@ -230,28 +230,25 @@ export class CandyService {
     return this.replaceComboProductsInternal(comboId, products);
   }
 
-  private async replaceComboProductsInternal(
-    comboId: number,
-    products: { product_id: number; cantidad: number }[]
-  ) {
-    const { error: deleteError } = await supabase
-      .from('combo_products')
-      .delete()
-      .eq('combo_id', comboId);
+  private async replaceComboProductsInternal(comboId: number,products: { product_id: number; cantidad: number }[]) {
+      const { error: deleteError } = await supabase
+        .from('combo_products')
+        .delete()
+        .eq('combo_id', comboId);
 
-    if (deleteError) {
-      return { data: null, error: deleteError };
-    }
+      if (deleteError) {
+        return { data: null, error: deleteError };
+      }
 
-    const rows = products.map(product => ({
-      combo_id: comboId,
-      product_id: product.product_id,
-      cantidad: product.cantidad
-    }));
+      const rows = products.map(product => ({
+        combo_id: comboId,
+        product_id: product.product_id,
+        cantidad: product.cantidad
+      }));
 
-    return supabase
-      .from('combo_products')
-      .insert(rows);
+      return supabase
+        .from('combo_products')
+        .insert(rows);
   }
 
   setComboActive(id: number, activo: boolean) {

@@ -64,4 +64,8 @@ export class PurchaseService {
       .order('created_at', { ascending: false });
   }
 
+  getVipSurcharge() {
+    return supabase.from('settings').select('value').eq('key','vip_surcharge').single();
+  }
+
 }

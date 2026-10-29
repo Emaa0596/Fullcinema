@@ -16,6 +16,8 @@ import { PurchaseDetail } from './pages/purchase-detail/purchase-detail';
 import { MyPurchases } from './pages/my-purchases/my-purchases';
 import { Candy } from './pages/candy/candy';
 import { AdminCandy } from './pages/admin-candy/admin-candy';
+import { Reports } from './pages/reports/reports';
+import { ActivityLog } from './pages/activity-log/activity-log';
 
 export const routes: Routes = [
     {path: '', pathMatch: 'full', redirectTo: 'home'},
@@ -32,5 +34,7 @@ export const routes: Routes = [
     {path: 'purchase/:id', component: PurchaseDetail},
     {path: 'my-purchases', component: MyPurchases, canActivate: [authGuard]},
     {path: 'candy', component: Candy},
-    {path: 'admin/candy', component: AdminCandy, canActivate: [adminGuard]}
+    {path: 'admin/candy', component: AdminCandy, canActivate: [adminGuard]},
+    {path:'reports', component:Reports, canActivate:[adminGuard]},
+    { path:'activity-log',component:ActivityLog,canActivate:[adminGuard]}
 ];

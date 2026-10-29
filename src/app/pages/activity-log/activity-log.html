@@ -1,0 +1,50 @@
+<div class="activity-page">
+    <div class="activity-header">
+        <h1>Registro de actividad</h1>
+        <p>Historial de acciones administrativas y validaciones.</p>
+    </div>
+
+    @if (error()) {
+        <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+        <p>Cargando registros...</p>
+    } @else {
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Acción</th>
+                        <th>Entidad</th>
+                        <th>Detalle</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (log of logs(); track log.id) {
+                        <tr>
+                            <td>{{ log.created_at }}</td>
+                            <td>
+                                @if (log.profiles) {
+                                    {{ log.profiles.nombre }} {{ log.profiles.apellido }}
+                                } @else {
+                                    Sistema
+                                }
+                            </td>
+                            <td>{{ log.action }}</td>
+                            <td>{{ log.entity }}</td>
+                            <td>{{ log.detail }}</td>
+                        </tr>
+                    } @empty {
+                        <tr>
+                            <td colspan="5">No hay registros de actividad.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

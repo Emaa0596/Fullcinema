@@ -10,4 +10,5 @@ export interface Movie {
     fechaEstreno?: string | null;
     preventaHabilitada?: boolean;
     precioPreventa?: number;
+    destacada?: boolean;
 }

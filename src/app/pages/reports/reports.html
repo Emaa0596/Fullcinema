@@ -1,0 +1,115 @@
+<div class="reports-page">
+    <div class="reports-header">
+        <div>
+            <h1>Reportes</h1>
+            <p>Información de ventas y rendimiento del cine.</p>
+        </div>
+    </div>
+
+    <div class="report-actions">
+        <button (click)="exportPdf()">Exportar PDF</button>
+        <button (click)="exportExcel()">Exportar Excel</button>
+    </div>
+
+    @if (error()) {
+        <p class="error">{{ error() }}</p>
+    }
+
+    @if (loading()) {
+        <p>Cargando reportes...</p>
+    } @else {
+
+        <section class="report-section">
+            <h2>Facturación diaria</h2>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                        @for (item of dailyRevenue(); track item.fecha) {
+                            <tr><td>{{ item.fecha }}</td><td>${{ item.total }}</td></tr>
+                        } @empty {
+                            <tr><td colspan="2">Sin datos.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2>Entradas vendidas por día</h2>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Entradas</th></tr>
+                    </thead>
+                    <tbody>
+                        @for (item of dailyTickets(); track item.fecha) {
+                            <tr><td>{{ item.fecha }}</td><td>{{ item.cantidad }}</td></tr>
+                        } @empty {
+                            <tr><td colspan="2">Sin datos.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="reports-grid">
+            <section class="report-section">
+                <h2>Más vistas - Últimos 7 días</h2>
+
+                <table>
+                    <thead>
+                        <tr><th>Película</th><th>Entradas</th></tr>
+                    </thead>
+                    <tbody>
+                        @for (movie of weeklyMovies(); track movie.movie_id) {
+                            <tr><td>{{ movie.nombre }}</td><td>{{ movie.entradas }}</td></tr>
+                        } @empty {
+                            <tr><td colspan="2">Sin datos.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="report-section">
+                <h2>Más vistas - Últimos 30 días</h2>
+
+                <table>
+                    <thead>
+                        <tr><th>Película</th><th>Entradas</th></tr>
+                    </thead>
+                    <tbody>
+                        @for (movie of monthlyMovies(); track movie.movie_id) {
+                            <tr><td>{{ movie.nombre }}</td><td>{{ movie.entradas }}</td></tr>
+                        } @empty {
+                            <tr><td colspan="2">Sin datos.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+        <section class="report-section">
+            <h2>Candy más vendido</h2>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th>Producto / Combo</th><th>Cantidad</th></tr>
+                    </thead>
+                    <tbody>
+                        @for (item of topCandy(); track item.nombre) {
+                            <tr><td>{{ item.nombre }}</td><td>{{ item.cantidad }}</td></tr>
+                        } @empty {
+                            <tr><td colspan="2">Sin datos.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+</div>

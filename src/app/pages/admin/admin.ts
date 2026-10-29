@@ -42,7 +42,8 @@ export class Admin {
     edadMinima: [0, [Validators.required, Validators.min(0)]],
     fechaEstreno: [''],
     preventaHabilitada: [false],
-    precioPreventa: [0, Validators.min(0)]
+    precioPreventa: [0, Validators.min(0)],
+    destacada: false
   });
 
   readonly showtimeForm = this.fb.nonNullable.group({
@@ -124,7 +125,8 @@ export class Admin {
       generos: movie.generos,
       edadMinima: movie.edad_minima,
       fechaEstreno: movie.fecha_estreno,
-      preventaHabilitada: movie.preventa_habilitada
+      preventaHabilitada: movie.preventa_habilitada,
+      destacada: movie.destacada ?? false
     }));
 
     this.movies.set(movies);
@@ -155,7 +157,8 @@ export class Admin {
         .map(genero => this.capitalize(genero)),
       edad_minima: values.edadMinima,
       fecha_estreno: values.fechaEstreno || null,
-      preventa_habilitada: values.preventaHabilitada
+      preventa_habilitada: values.preventaHabilitada,
+      destacada: values.destacada
     };
 
     const id = this.editingMovieId();
@@ -190,7 +193,8 @@ export class Admin {
       generos: movie.generos.join(', '),
       edadMinima: movie.edadMinima,
       fechaEstreno: movie.fechaEstreno ?? '',
-      preventaHabilitada: movie.preventaHabilitada ?? false
+      preventaHabilitada: movie.preventaHabilitada ?? false,
+      destacada: movie.destacada ?? false
     });
   }
 
@@ -223,7 +227,8 @@ export class Admin {
       generos: '',
       edadMinima: 0,
       fechaEstreno: '',
-      preventaHabilitada: false
+      preventaHabilitada: false,
+      destacada: false
     });
   }
 

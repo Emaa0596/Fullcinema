@@ -52,7 +52,8 @@ export class AdminCandy {
     descripcion: '',
     porcentaje: 0,
     fecha_desde: '',
-    fecha_hasta: ''
+    fecha_hasta: '',
+    edad_minima: null
   };
 
   categoryForm = {
@@ -83,7 +84,8 @@ export class AdminCandy {
       descripcion: this.couponForm.descripcion.trim() || null,
       porcentaje: this.couponForm.porcentaje,
       fecha_desde: this.couponForm.fecha_desde || null,
-      fecha_hasta: this.couponForm.fecha_hasta || null,
+      fecha_hasta: this.couponForm.fecha_hasta || null
+      
     };
 
     const result = this.couponForm.id
@@ -112,7 +114,8 @@ export class AdminCandy {
       descripcion: coupon.descripcion ?? '',
       porcentaje: coupon.porcentaje,
       fecha_desde: coupon.fecha_desde ?? '',
-      fecha_hasta: coupon.fecha_hasta ?? ''
+      fecha_hasta: coupon.fecha_hasta ?? '',
+      edad_minima: this.couponForm.edad_minima || null
     };
   }
 
@@ -123,7 +126,8 @@ export class AdminCandy {
       descripcion: '',
       porcentaje: 0,
       fecha_desde: '',
-      fecha_hasta: ''
+      fecha_hasta: '',
+      edad_minima: null
     };
   }
 

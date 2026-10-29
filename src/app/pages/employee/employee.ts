@@ -57,6 +57,30 @@ export class Employee implements OnDestroy {
     console.log('TICKET VALIDADO:', data);
   }
 
+  async validateCandy() {
+    this.successMessage.set('');
+    this.errorMessage.set('');
+
+    const ticketCode = this.code().trim();
+    if(!ticketCode){
+      this.errorMessage.set('Ingresá o escaneá el código de la entrada.');
+      return;
+    }
+
+    this.validating.set(true);
+    const { data,error } = await this.ticketService.validateCandy(ticketCode);
+    this.validating.set(false);
+
+    if(error){
+      console.error('Error validando Candy:',error);
+      this.errorMessage.set(error.message);
+      return;
+    }
+
+    this.successMessage.set(data?.message ?? 'Candy entregado correctamente.');
+    this.code.set('');
+  }
+
   onCamerasFound(devices: MediaDeviceInfo[]) {
     this.cameras.set(devices);
 

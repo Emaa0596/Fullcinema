@@ -76,16 +76,22 @@
     <h3>Entradas</h3>
 
     <div class="ticket-summary">
-      <p>
-        Cantidad:
-        {{ purchase.showtime_seats?.length }}
-      </p>
+        <p>Cantidad: {{ purchase.showtime_seats?.length }}</p>
 
-      <p>
-        Precio por entrada:
-        ${{ purchase.showtimes?.precio }}
-      </p>
+        @for (item of purchase.showtime_seats; track item.seat_id) {
+          <p>
+              Butaca {{ item.seats?.fila }}{{ item.seats?.numero }}
+              @if (item.seats?.tipo === 'vip') {
+                  <strong> - VIP (+${{ vipSurcharge() }})</strong>
+              }
+          </p>
+        }
 
+        @if (vipCount(purchase) > 0) {
+            <p>Recargo VIP: {{ vipCount(purchase) }} × ${{ vipSurcharge() }}</p>
+        }
+
+        <p><strong>Subtotal entradas: ${{ ticketsSubtotal(purchase) }}</strong></p>
     </div>
 
     <hr>

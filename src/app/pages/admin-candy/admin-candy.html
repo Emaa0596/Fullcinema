@@ -435,6 +435,11 @@
         </label>
 
         <label>
+          Edad mínima
+          <input type="number" [(ngModel)]="couponForm.edad_minima" min="0" placeholder="Sin restricción">
+        </label>
+
+        <label>
           <span>Válido desde</span>
           <input type="date" [(ngModel)]="couponForm.fecha_desde">
         </label>
@@ -488,6 +493,9 @@
                 ·
                 Hasta: {{ coupon.fecha_hasta || 'Sin fecha' }}
               </span>
+
+              <strong>Edad mínima</strong>
+              <td>{{ coupon.edad_minima ? coupon.edad_minima + ' años' : 'Sin restricción' }}</td>
 
               <span class="product-status" [class.active]="coupon.activo">
                 @if (coupon.activo) {

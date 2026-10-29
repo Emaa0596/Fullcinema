@@ -35,6 +35,9 @@ export class SeatSelection implements OnDestroy {
   readonly guestBirthDate = signal('');
 
   readonly movieMinimumAge = signal(0);
+  readonly ticketPrice = signal(0);
+  readonly vipSurcharge = signal(0);
+  readonly presaleActive = signal(false);
 
   readonly ageNoticeVisible = signal(false);
   readonly ageNoticeAccepted = signal(false);
@@ -51,6 +54,12 @@ export class SeatSelection implements OnDestroy {
     this.seats().filter(seat =>
       this.selectedSeats().includes(seat.id)
     )
+  );
+
+  readonly vipSelectedCount = computed(() => this.selectedSeatData().filter(seat => seat.tipo === 'vip').length);
+
+  readonly ticketsTotal = computed(() =>
+    (this.selectedSeatData().length * this.ticketPrice()) + (this.vipSelectedCount() * this.vipSurcharge())
   );
 
   private realtimeChannel?: RealtimeChannel;
@@ -111,6 +120,9 @@ export class SeatSelection implements OnDestroy {
     this.seats.set(data.seats ?? []);
     this.occupiedSeats.set(data.occupiedSeats ?? []);
     this.movieMinimumAge.set(data.minimumAge ?? 0);
+    this.ticketPrice.set(data.ticketPrice ?? 0);
+    this.vipSurcharge.set(data.vipSurcharge ?? 0);
+    this.presaleActive.set(data.presaleActive ?? false);
 
 
     // Si una butaca seleccionada pasó a estar ocupada

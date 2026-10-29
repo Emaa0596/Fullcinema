@@ -1,235 +1,128 @@
 <div class="home">
 
-  <!-- TOP 3 -->
+    <!-- TOP 3 MÁS VENDIDAS -->
+    @if (topMovies().length > 0) {
+        <section class="top-movies">
+            <h2>Top 3 más vendidas</h2>
 
-  @if (topMovies().length > 0) {
+            <div class="top-grid">
+                @for (movie of topMovies(); track movie.id; let i = $index) {
+                    <article class="top-card">
+                        <span class="position">#{{ i + 1 }}</span>
 
-    <section class="top-movies">
+                        <img [src]="movie.imagen" [alt]="movie.nombre">
 
-      <h2>Mejor calificadas</h2>
-
-      <div class="top-grid">
-
-        @for (movie of topMovies(); track movie.movie_id; let i = $index) {
-
-          <article class="top-card">
-
-            <span class="position">
-              #{{ i + 1 }}
-            </span>
-
-            <img
-              [src]="movie.imagen"
-              [alt]="movie.nombre"
-            >
-
-            <div class="top-info">
-
-              <h3>
-                {{ movie.nombre }}
-              </h3>
-
-              <p class="top-rating">
-                ★ {{ movie.promedio }}
-              </p>
-
-              <small>
-                {{ movie.cantidad_reviews }}
-
-                @if (movie.cantidad_reviews === 1) {
-                  calificación
-                } @else {
-                  calificaciones
+                        <div class="top-info">
+                            <h3>{{ movie.nombre }}</h3>
+                            <p>{{ movie.ventas }} entradas vendidas</p>
+                        </div>
+                    </article>
                 }
-              </small>
-
             </div>
-
-          </article>
-
-        }
-
-      </div>
-
-    </section>
-
-  }
-
-
-  <!-- PELÍCULAS -->
-
-  <section class="movies-section">
-
-    <div class="movies-header">
-
-      <h2>Películas</h2>
-
-      <div class="filters">
-
-        <!-- BUSCADOR -->
-
-        <input
-          type="text"
-          placeholder="Buscar película..."
-          (input)="onSearch($event)"
-        >
-
-
-        <!-- FILTRO POR GÉNERO -->
-
-        <select
-          [value]="selectedgenre()"
-          (change)="onGenreChange($event)"
-        >
-
-          <option value="">
-            Todos los géneros
-          </option>
-
-          @for (genre of genresSet(); track genre) {
-
-            <option [value]="genre">
-              {{ genre }}
-            </option>
-
-          }
-
-        </select>
-
-      </div>
-
-    </div>
-
-
-    <!-- LISTADO DE PELÍCULAS -->
-
-    @if (filteredMovies().length > 0) {
-
-      <div class="movies-grid">
-
-        @for (movie of filteredMovies(); track movie.id) {
-
-          <app-movie-card
-            [movie]="movie"
-            [rating]="getRating(movie.id)"
-          />
-
-        }
-
-      </div>
-
-    } @else {
-
-      <p class="empty-message">
-        No se encontraron películas.
-      </p>
-
+        </section>
     }
 
-  </section>
+    @if (featuredMovies().length > 0) {
+        <section class="featured-section">
+            <div class="section-header">
+                <div>
+                    <span class="section-label">SELECCIÓN DEL CINE</span>
+                    <h2>Destacadas</h2>
+                </div>
+            </div>
 
-  @if (presaleMovies().length > 0) {
+            <div class="featured-grid">
+                @for (movie of featuredMovies(); track movie.id) {
+                    <app-movie-card [movie]="movie" [rating]="getRating(movie.id)" />
+                }
+            </div>
+        </section>
+    }
 
-    <section class="presale-section">
+    <!-- PELÍCULAS -->
+    <section class="movies-section">
+        <div class="movies-header">
+            <h2>Películas</h2>
 
-      <div class="section-header">
-        <div>
-          <span class="section-label">VENTA ANTICIPADA</span>
-          <h2>Preventa</h2>
+            <div class="filters">
+                <input type="text" placeholder="Buscar película..." (input)="onSearch($event)">
+
+                <select [value]="selectedgenre()" (change)="onGenreChange($event)">
+                    <option value="">Todos los géneros</option>
+
+                    @for (genre of genresSet(); track genre) {
+                        <option [value]="genre">{{ genre }}</option>
+                    }
+                </select>
+            </div>
         </div>
 
-        <p>
-          Conseguí tus entradas antes del estreno.
-        </p>
-      </div>
-
-      <div class="movies-grid">
-
-        @for (movie of presaleMovies(); track movie.id) {
-
-          <article class="presale-card">
-
-            <div class="poster-container">
-
-              <img
-                [src]="movie.imagen"
-                [alt]="movie.nombre"
-              >
-
-              <span class="presale-badge">
-                PREVENTA
-              </span>
-
+        @if (filteredMovies().length > 0) {
+            <div class="movies-grid">
+                @for (movie of filteredMovies(); track movie.id) {
+                    <app-movie-card [movie]="movie" [rating]="getRating(movie.id)" />
+                }
             </div>
-
-            <div class="presale-info">
-
-              <h3>{{ movie.nombre }}</h3>
-
-              <p>
-                Estreno: {{ movie.fechaEstreno }}
-              </p>
-
-              <p class="presale-price">
-                ${{ movie.precioPreventa }}
-              </p>
-
-              <a [routerLink]="['/movies', movie.id, 'showtimes']" >
-                Comprar entradas
-              </a>
-
-            </div>
-
-          </article>
-
+        } @else {
+            <p class="empty-message">No se encontraron películas.</p>
         }
-
-      </div>
-
     </section>
 
-  }
+    <!-- PREVENTA -->
+    @if (presaleMovies().length > 0) {
+        <section class="presale-section">
+            <div class="section-header">
+                <div>
+                    <span class="section-label">VENTA ANTICIPADA</span>
+                    <h2>Preventa</h2>
+                </div>
 
-  @if (upcomingMovies().length > 0) {
-
-    <section class="upcoming-section">
-
-      <div class="section-header">
-        <div>
-          <span class="section-label">PRÓXIMOS ESTRENOS</span>
-          <h2>Próximamente</h2>
-        </div>
-      </div>
-
-      <div class="upcoming-carousel">
-
-        @for (movie of upcomingMovies(); track movie.id) {
-
-          <article class="upcoming-card">
-
-            <img
-              [src]="movie.imagen"
-              [alt]="movie.nombre"
-            >
-
-            <div class="upcoming-info">
-
-              <h3>{{ movie.nombre }}</h3>
-
-              <p>
-                Estreno: {{ movie.fechaEstreno }}
-              </p>
-
+                <p>Conseguí tus entradas antes del estreno.</p>
             </div>
 
-          </article>
+            <div class="presale-grid">
+                @for (movie of presaleMovies(); track movie.id) {
+                    <article class="presale-card">
+                        <div class="poster-container">
+                            <img [src]="movie.imagen" [alt]="movie.nombre">
+                            <span class="presale-badge">PREVENTA</span>
+                        </div>
 
-        }
+                        <div class="presale-info">
+                            <h3>{{ movie.nombre }}</h3>
+                            <p>Estreno: {{ movie.fechaEstreno }}</p>
+                            <p class="presale-price">Precio especial según formato</p>
+                            <a [routerLink]="['/movies',movie.id,'showtimes']">Comprar entradas</a>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+    }
 
-      </div>
+    <!-- PRÓXIMAMENTE -->
+    @if (upcomingMovies().length > 0) {
+        <section class="upcoming-section">
+            <div class="section-header">
+                <div>
+                    <span class="section-label">PRÓXIMOS ESTRENOS</span>
+                    <h2>Próximamente</h2>
+                </div>
+            </div>
 
-    </section>
+            <div class="upcoming-carousel">
+                @for (movie of upcomingMovies(); track movie.id) {
+                    <article class="upcoming-card">
+                        <img [src]="movie.imagen" [alt]="movie.nombre">
 
-  }
+                        <div class="upcoming-info">
+                            <h3>{{ movie.nombre }}</h3>
+                            <p>Estreno: {{ movie.fechaEstreno }}</p>
+                        </div>
+                    </article>
+                }
+            </div>
+        </section>
+    }
 
 </div>

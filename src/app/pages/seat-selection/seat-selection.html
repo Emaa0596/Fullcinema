@@ -120,6 +120,11 @@
 
   <div class="seat-summary">
 
+    <div class="seat-legend">
+      <span>Butaca estándar</span>
+      <span>VIP +${{ vipSurcharge() }}</span>
+    </div>
+
     <h2>Tu selección</h2>
 
     @if (selectedSeatData().length > 0) {
@@ -140,6 +145,14 @@
         Cantidad:
         {{ selectedSeatData().length }}
       </p>
+
+      <p>Precio por entrada: <strong>${{ ticketPrice() }}</strong></p>
+
+        @if (vipSelectedCount() > 0) {
+            <p>Butacas VIP: {{ vipSelectedCount() }} × +${{ vipSurcharge() }}</p>
+        }
+
+      <p class="ticket-total">Total entradas: <strong>${{ ticketsTotal() }}</strong></p>
 
 
       @if (!isLoggedIn()) {

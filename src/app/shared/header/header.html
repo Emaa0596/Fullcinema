@@ -41,10 +41,10 @@
       Mis compras
     </a>
 
-    @if (profileStore.profile()?.rol === Role.Admin) {
-    <a routerLink="/admin">
-      Admin
-    </a>
+    @if (profileStore.profile()?.rol === 'admin') {
+      <a routerLink="/admin">Administración</a>
+      <a routerLink="/reports">Reportes</a>
+      <a routerLink="/activity-log">Actividad</a>
     }
 
     @if (

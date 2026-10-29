@@ -71,17 +71,16 @@ export class Showtimes {
 
     const showtimes = (data ?? []).map((showtime: any) => {
       const movie = showtime.movies;
-      const presaleActive =
-        movie?.fecha_estreno &&
-        movie?.preventa_habilitada &&
-        this.isPresaleActive(movie);
-
-      return {...showtime,
+      const presaleActive = movie?.fecha_estreno && movie?.preventa_habilitada && this.isPresaleActive(movie);
+      return {
+        ...showtime,
         precioOriginal: Number(showtime.precio),
         precio: presaleActive ? Number(showtime.precio_preventa) : Number(showtime.precio),
         preventaActiva: presaleActive
       };
     });
+
+    this.showtimes.set(showtimes);
 
     this.showtimes.set(showtimes);
   }

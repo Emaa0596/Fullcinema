@@ -7,10 +7,7 @@ import { supabase } from '../supabase.client';
 export class MovieService {
 
   getMovies() {
-    return supabase
-      .from('movies')
-      .select('*')
-      .order('id', { ascending: true });
+    return supabase.from('movies').select('*').order('id', { ascending: true });
   }
 
   createMovie(movie: {
@@ -20,10 +17,11 @@ export class MovieService {
     sinopsis: string;
     generos: string[];
     edad_minima: number;
+    fecha_estreno?: string | null;
+    preventa_habilitada?: boolean;
+    destacada?: boolean;
   }) {
-    return supabase
-      .from('movies')
-      .insert(movie);
+    return supabase.from('movies').insert(movie);
   }
 
   updateMovie(id: number, movie: {
@@ -33,25 +31,22 @@ export class MovieService {
     sinopsis: string;
     generos: string[];
     edad_minima: number;
+    fecha_estreno?: string | null;
+    preventa_habilitada?: boolean;
+    destacada?: boolean;
   }) {
-    return supabase
-      .from('movies')
-      .update(movie)
-      .eq('id', id);
+    return supabase.from('movies').update(movie).eq('id', id);
   }
 
   deleteMovie(id: number) {
-    return supabase
-      .from('movies')
-      .delete()
-      .eq('id', id);
+    return supabase.from('movies').delete().eq('id', id);
   }
 
   getMovieById(movieId: number) {
-    return supabase
-      .from('movies')
-      .select('*')
-      .eq('id', movieId)
-      .single();
+    return supabase.from('movies').select('*').eq('id', movieId).single();
+  }
+
+  getTopMovies() {
+    return supabase.rpc('get_top_movies');
   }
 }
